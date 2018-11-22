@@ -21,8 +21,8 @@ import org.apache.logging.log4j.Logger;
 		modid = FTBMoney.MOD_ID,
 		name = FTBMoney.MOD_NAME,
 		version = FTBMoney.VERSION,
-		dependencies = FTBLib.THIS_DEP,
-		acceptableRemoteVersions = "*"
+		acceptableRemoteVersions = "*",
+		dependencies = FTBLib.THIS_DEP
 )
 public class FTBMoney
 {
