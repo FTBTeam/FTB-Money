@@ -1,1 +1,1 @@
-# FTB-Money
+# FTB Money [![](http://cf.way2muchnoise.eu/ftb-money.svg)](https://minecraft.curseforge.com/projects/ftb-money) [![](http://cf.way2muchnoise.eu/versions/ftb-money.svg)](https://minecraft.curseforge.com/projects/ftb-money)

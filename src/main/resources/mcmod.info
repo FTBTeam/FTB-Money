@@ -1,0 +1,17 @@
+[
+	{
+		"modid": "ftbmoney",
+		"name": "FTB Money",
+		"description": "",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "http://minecraft.curseforge.com/projects/ftb-money",
+		"updateUrl": "",
+		"authorList": ["LatvianModder"],
+		"credits": "",
+		"logoFile": "assets/ftbmoney/textures/logo.png",
+		"screenshots": [],
+		"parent": "",
+		"dependencies": []
+	}
+]
