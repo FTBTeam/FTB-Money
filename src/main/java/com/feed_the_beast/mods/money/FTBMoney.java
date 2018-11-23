@@ -69,9 +69,14 @@ public class FTBMoney
 		}
 	}
 
+	public static String moneyString(long money)
+	{
+		return String.format("$%,d", money);
+	}
+
 	public static ITextComponent moneyComponent(long money)
 	{
-		ITextComponent component = new TextComponentString(String.format("$%,d", money));
+		ITextComponent component = new TextComponentString(moneyString(money));
 		component.getStyle().setColor(TextFormatting.GOLD);
 		return component;
 	}

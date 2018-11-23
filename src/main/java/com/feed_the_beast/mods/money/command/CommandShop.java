@@ -22,11 +22,13 @@ public class CommandShop extends CommandBase
 		return "commands.ftbmoney.shop.usage";
 	}
 
+	@Override
 	public int getRequiredPermissionLevel()
 	{
 		return 0;
 	}
 
+	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;

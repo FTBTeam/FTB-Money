@@ -1,9 +1,6 @@
 commands.ftbmoney.money.usage=/money
 commands.ftbmoney.setmoney.usage=/setmoney <player> <amount>
-commands.ftbmoney.setmoney.add=Added %s to %s's balance
-commands.ftbmoney.setmoney.set=Set %s's balance to %s
 commands.ftbmoney.pay.usage=/pay <player> <amount>
-commands.ftbmoney.pay.paid=%s paid %s %s
 commands.ftbmoney.shop.usage=/shop <buy|sell|list>
 commands.ftbmoney.trade.usage=/trade <player>
 
