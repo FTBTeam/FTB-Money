@@ -1,6 +1,7 @@
 package com.feed_the_beast.mods.money;
 
 import com.feed_the_beast.ftblib.FTBLib;
+import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.mods.money.command.CommandMoney;
 import com.feed_the_beast.mods.money.command.CommandPay;
 import com.feed_the_beast.mods.money.command.CommandSetMoney;
@@ -49,18 +50,31 @@ public class FTBMoney
 
 	public static long getMoney(EntityPlayer player)
 	{
-		return player.getEntityData().getLong("ftb_money");
+		long money = NBTUtils.getPersistedData(player, false).getLong("ftb_money");
+
+		if (money == 0L)
+		{
+			money = player.getEntityData().getLong("ftb_money");
+
+			if (money > 0L)
+			{
+				NBTUtils.getPersistedData(player, true).setLong("ftb_money", money);
+				player.getEntityData().removeTag("ftb_money");
+			}
+		}
+
+		return money;
 	}
 
 	public static void setMoney(EntityPlayer player, long money)
 	{
 		if (money <= 0L)
 		{
-			player.getEntityData().removeTag("ftb_money");
+			NBTUtils.getPersistedData(player, false).removeTag("ftb_money");
 		}
 		else
 		{
-			player.getEntityData().setLong("ftb_money", money);
+			NBTUtils.getPersistedData(player, true).setLong("ftb_money", money);
 		}
 
 		if (!player.world.isRemote)
