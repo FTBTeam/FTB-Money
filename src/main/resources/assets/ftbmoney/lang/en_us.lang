@@ -5,3 +5,5 @@ commands.ftbmoney.shop.usage=/shop <buy|sell|list>
 commands.ftbmoney.trade.usage=/trade <player>
 
 sidebar_button.ftbmoney.shop=Shop
+
+ftbmoney.balance=Balance
