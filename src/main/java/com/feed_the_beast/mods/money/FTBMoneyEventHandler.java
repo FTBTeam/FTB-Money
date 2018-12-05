@@ -1,10 +1,21 @@
 package com.feed_the_beast.mods.money;
 
+import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
+import com.feed_the_beast.mods.money.shop.Shop;
+import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+
+import java.io.File;
 
 /**
  * @author LatvianModder
@@ -12,9 +23,57 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 @Mod.EventBusSubscriber(modid = FTBMoney.MOD_ID)
 public class FTBMoneyEventHandler
 {
+	public static File getFile(World world)
+	{
+		if (FTBMoneyConfig.general.use_config_store)
+		{
+			return new File(Loader.instance().getConfigDir(), "ftbmoneyshop.nbt");
+		}
+
+		return new File(world.getSaveHandler().getWorldDirectory(), "data/ftbmoneyshop.nbt");
+	}
+
+	@SubscribeEvent
+	public static void onWorldLoaded(WorldEvent.Load event)
+	{
+		if (!event.getWorld().isRemote && event.getWorld().provider.getDimension() == 0)
+		{
+			Shop.SERVER = new Shop();
+			NBTTagCompound nbt = NBTUtils.readNBT(getFile(event.getWorld()));
+
+			if (nbt != null)
+			{
+				Shop.SERVER.deserializeNBT(nbt);
+			}
+
+			if (Shop.SERVER.tabs.isEmpty())
+			{
+				ShopTab tab = new ShopTab(Shop.SERVER);
+				tab.title = "Misc";
+				tab.icon = new ItemStack(Items.EMERALD);
+				tab.netID = ++Shop.SERVER.nextNetID;
+				Shop.SERVER.tabs.add(tab);
+				Shop.SERVER.markDirty();
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onWorldSaved(WorldEvent.Save event)
+	{
+		if (Shop.SERVER != null && Shop.SERVER.shouldSave && !event.getWorld().isRemote && event.getWorld().provider.getDimension() == 0)
+		{
+			Shop.SERVER.shouldSave = false;
+			NBTUtils.writeNBTSafe(getFile(event.getWorld()), Shop.SERVER.serializeNBT());
+		}
+	}
+
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
+		if (event.player instanceof EntityPlayerMP)
+		{
+			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
+		}
 	}
 }

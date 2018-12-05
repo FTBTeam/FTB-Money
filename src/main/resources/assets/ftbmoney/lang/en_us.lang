@@ -1,9 +1,14 @@
 commands.ftbmoney.money.usage=/money
 commands.ftbmoney.setmoney.usage=/setmoney <player> <amount>
-commands.ftbmoney.pay.usage=/pay <player> <amount>
-commands.ftbmoney.shop.usage=/shop <buy|sell|list>
-commands.ftbmoney.trade.usage=/trade <player>
+commands.ftbmoney.setmoney.add=Added %s to %s's balance
+commands.ftbmoney.setmoney.set=Set %s's balance to %s
+commands.ftbmoney.shop.usage=/shop <buy|list|add|remove|edit>
+commands.ftbmoney.shop.gui.usage=/shop gui
+commands.ftbmoney.shop.add.usage=/shop add <price>
+commands.ftbmoney.shop.add.hand_empty=You must hold an item in main hand!
 
 sidebar_button.ftbmoney.shop=Shop
 
 ftbmoney.balance=Balance
+ftbmoney.buy=Buy
+ftbmoney.sell=Sell

@@ -12,6 +12,9 @@ public class FTBMoneyNetHandler
 
 	public static void init()
 	{
+		NET.register(new MessageOpenShop());
 		NET.register(new MessageUpdateMoney());
+		NET.register(new MessageDeleteShopEntry());
+		NET.register(new MessageBuy());
 	}
 }

@@ -3,7 +3,8 @@
 		"group": "ftblib:util",
 		"icon": "ftblib:icons/money_bag",
 		"x": 100,
-		"click": "command:/shop",
-		"required_server_mods": ["ftbmoney"]
+		"click": "command:/shop gui",
+		"required_server_mods": ["ftbmoney"],
+		"loading_screen": true
 	}
 }

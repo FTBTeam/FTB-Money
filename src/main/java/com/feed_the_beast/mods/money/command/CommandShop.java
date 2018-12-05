@@ -1,15 +1,20 @@
 package com.feed_the_beast.mods.money.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.server.command.CommandTreeBase;
 
 /**
  * @author LatvianModder
  */
-public class CommandShop extends CommandBase
+public class CommandShop extends CommandTreeBase
 {
+	public CommandShop()
+	{
+		addSubcommand(new CommandShopGui());
+		addSubcommand(new CommandShopAdd());
+	}
+
 	@Override
 	public String getName()
 	{
@@ -32,11 +37,5 @@ public class CommandShop extends CommandBase
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
-	}
-
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args)
-	{
-		sender.sendMessage(new TextComponentString("WIP!"));
 	}
 }

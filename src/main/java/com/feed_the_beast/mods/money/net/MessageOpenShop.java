@@ -4,25 +4,26 @@ import com.feed_the_beast.ftblib.lib.io.DataIn;
 import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftblib.lib.net.MessageToClient;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
-import com.feed_the_beast.mods.money.FTBMoney;
-import net.minecraft.client.Minecraft;
+import com.feed_the_beast.mods.money.gui.GuiShop;
+import com.feed_the_beast.mods.money.shop.Shop;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author LatvianModder
  */
-public class MessageUpdateMoney extends MessageToClient
+public class MessageOpenShop extends MessageToClient
 {
-	private long money;
+	private NBTTagCompound nbt;
 
-	public MessageUpdateMoney()
+	public MessageOpenShop()
 	{
 	}
 
-	public MessageUpdateMoney(long m)
+	public MessageOpenShop(Shop s)
 	{
-		money = m;
+		nbt = s.serializeNBT();
 	}
 
 	@Override
@@ -34,19 +35,21 @@ public class MessageUpdateMoney extends MessageToClient
 	@Override
 	public void writeData(DataOut data)
 	{
-		data.writeVarLong(money);
+		data.writeNBT(nbt);
 	}
 
 	@Override
 	public void readData(DataIn data)
 	{
-		money = data.readVarLong();
+		nbt = data.readNBT();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void onMessage()
 	{
-		FTBMoney.setMoney(Minecraft.getMinecraft().player, money);
+		Shop shop = new Shop();
+		shop.deserializeNBT(nbt);
+		new GuiShop(shop).openGui();
 	}
 }
