@@ -1,5 +1,6 @@
 package com.feed_the_beast.mods.money.shop;
 
+import com.feed_the_beast.ftblib.lib.item.ItemStackSerializer;
 import com.feed_the_beast.ftblib.lib.math.BlockDimPos;
 import com.feed_the_beast.ftblib.lib.util.StringUtils;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 	public NBTTagCompound serializeNBT()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setTag("item", stack.serializeNBT());
+		nbt.setTag("item", ItemStackSerializer.write(stack, false));
 
 		if (buy > 0L)
 		{
@@ -59,7 +60,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
 		page = nbt.getString("page");
-		stack = new ItemStack(nbt.getCompoundTag("item"));
+		stack = ItemStackSerializer.read(nbt.getTag("item"));
 		buy = nbt.getLong("buy");
 		sell = nbt.getLong("sell");
 		int[] p = nbt.getIntArray("stock");

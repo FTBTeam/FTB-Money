@@ -1,5 +1,6 @@
 package com.feed_the_beast.mods.money.shop;
 
+import com.feed_the_beast.ftblib.lib.item.ItemStackSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,7 +30,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setString("title", title);
-		nbt.setTag("icon", icon.serializeNBT());
+		nbt.setTag("icon", ItemStackSerializer.write(icon, false));
 
 		NBTTagList e = new NBTTagList();
 
@@ -46,13 +47,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
 		title = nbt.getString("title");
-		icon = new ItemStack(nbt.getCompoundTag("icon"));
-
-		if (icon.isEmpty())
-		{
-			icon = ItemStack.EMPTY;
-		}
-
+		icon = ItemStackSerializer.read(nbt.getTag("icon"));
 		entries.clear();
 		NBTTagList e = nbt.getTagList("entries", Constants.NBT.TAG_COMPOUND);
 
