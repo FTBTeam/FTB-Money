@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import java.util.List;
 public class ShopTab implements INBTSerializable<NBTTagCompound>
 {
 	public final Shop shop;
-	public int netID = 0;
 	public String title = "";
 	public ItemStack icon = ItemStack.EMPTY;
 	public final List<ShopEntry> entries = new ArrayList<>();
@@ -65,23 +63,13 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 
 			if (!entry.stack.isEmpty())
 			{
-				entry.netID = ++shop.nextNetID;
 				entries.add(entry);
 			}
 		}
 	}
 
-	@Nullable
-	public ShopEntry getEntry(int netID)
+	public int getIndex()
 	{
-		for (ShopEntry entry : entries)
-		{
-			if (entry.netID == netID)
-			{
-				return entry;
-			}
-		}
-
-		return null;
+		return shop.tabs.indexOf(this);
 	}
 }

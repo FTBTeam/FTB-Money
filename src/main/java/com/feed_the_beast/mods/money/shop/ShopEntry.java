@@ -14,7 +14,6 @@ import java.util.UUID;
 public class ShopEntry implements INBTSerializable<NBTTagCompound>
 {
 	public final ShopTab tab;
-	public int netID = 0;
 	public String page = "";
 	public ItemStack stack = ItemStack.EMPTY;
 	public long buy = 0L;
@@ -66,5 +65,10 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		int[] p = nbt.getIntArray("stock");
 		stock = p.length == 4 ? new BlockDimPos(p[0], p[1], p[2], p[3]) : null;
 		createdBy = StringUtils.fromString(nbt.getString("created_by"));
+	}
+
+	public int getIndex()
+	{
+		return tab.entries.indexOf(this);
 	}
 }

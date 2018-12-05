@@ -17,6 +17,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
  */
 public class MessageBuy extends MessageToServer
 {
+	private int tab;
 	private int id;
 	private int count;
 
@@ -24,9 +25,10 @@ public class MessageBuy extends MessageToServer
 	{
 	}
 
-	public MessageBuy(int i, int c)
+	public MessageBuy(ShopEntry e, int c)
 	{
-		id = i;
+		tab = e.tab.getIndex();
+		id = e.getIndex();
 		count = c;
 	}
 
@@ -39,6 +41,7 @@ public class MessageBuy extends MessageToServer
 	@Override
 	public void writeData(DataOut data)
 	{
+		data.writeVarInt(tab);
 		data.writeVarInt(id);
 		data.writeVarInt(count);
 	}
@@ -46,6 +49,7 @@ public class MessageBuy extends MessageToServer
 	@Override
 	public void readData(DataIn data)
 	{
+		tab = data.readVarInt();
 		id = data.readVarInt();
 		count = data.readVarInt();
 	}
@@ -53,35 +57,27 @@ public class MessageBuy extends MessageToServer
 	@Override
 	public void onMessage(EntityPlayerMP player)
 	{
-		for (ShopTab tab : Shop.SERVER.tabs)
+		ShopTab t = Shop.SERVER.tabs.get(tab);
+		ShopEntry entry = t.entries.get(id);
+		long money = FTBMoney.getMoney(player);
+
+		if (money >= entry.buy * count)
 		{
-			ShopEntry entry = tab.getEntry(id);
+			ItemStack stack = entry.stack;
 
-			if (entry != null)
+			if (stack.getCount() * count <= stack.getMaxStackSize())
 			{
-				long money = FTBMoney.getMoney(player);
-
-				if (money >= entry.buy * count)
-				{
-					ItemStack stack = entry.stack;
-
-					if (stack.getCount() * count <= stack.getMaxStackSize())
-					{
-						ItemHandlerHelper.giveItemToPlayer(player, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() * count));
-					}
-					else
-					{
-						for (int i = 0; i < count; i++)
-						{
-							ItemHandlerHelper.giveItemToPlayer(player, stack.copy());
-						}
-					}
-
-					FTBMoney.setMoney(player, money - entry.buy * count);
-				}
-
-				return;
+				ItemHandlerHelper.giveItemToPlayer(player, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() * count));
 			}
+			else
+			{
+				for (int i = 0; i < count; i++)
+				{
+					ItemHandlerHelper.giveItemToPlayer(player, stack.copy());
+				}
+			}
+
+			FTBMoney.setMoney(player, money - entry.buy * count);
 		}
 	}
 }

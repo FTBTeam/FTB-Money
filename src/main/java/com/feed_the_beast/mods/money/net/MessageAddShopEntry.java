@@ -9,24 +9,25 @@ import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.server.permission.PermissionAPI;
 
 /**
  * @author LatvianModder
  */
-public class MessageDeleteShopEntry extends MessageToServer
+public class MessageAddShopEntry extends MessageToServer
 {
 	private int tab;
-	private int id;
+	private NBTTagCompound nbt;
 
-	public MessageDeleteShopEntry()
+	public MessageAddShopEntry()
 	{
 	}
 
-	public MessageDeleteShopEntry(ShopEntry e)
+	public MessageAddShopEntry(ShopEntry e)
 	{
 		tab = e.tab.getIndex();
-		id = e.getIndex();
+		nbt = e.serializeNBT();
 	}
 
 	@Override
@@ -39,14 +40,14 @@ public class MessageDeleteShopEntry extends MessageToServer
 	public void writeData(DataOut data)
 	{
 		data.writeVarInt(tab);
-		data.writeVarInt(id);
+		data.writeNBT(nbt);
 	}
 
 	@Override
 	public void readData(DataIn data)
 	{
 		tab = data.readVarInt();
-		id = data.readVarInt();
+		nbt = data.readNBT();
 	}
 
 	@Override
@@ -55,7 +56,9 @@ public class MessageDeleteShopEntry extends MessageToServer
 		if (PermissionAPI.hasPermission(player, FTBMoney.PERM_EDIT_SHOP))
 		{
 			ShopTab t = Shop.SERVER.tabs.get(tab);
-			t.entries.remove(id);
+			ShopEntry entry = new ShopEntry(t);
+			entry.deserializeNBT(nbt);
+			t.entries.add(entry);
 			t.shop.markDirty();
 		}
 	}

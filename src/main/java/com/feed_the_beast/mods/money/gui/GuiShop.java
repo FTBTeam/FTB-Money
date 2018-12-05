@@ -17,23 +17,27 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class GuiShop extends GuiBase
 {
-	public static int selectedTabIndex;
-
 	public final Shop shop;
+	public final boolean canEdit;
 	public ShopTab selectedTab;
 	public final Panel panelButtons;
+	public final Panel panelTabs;
 	public final PanelScrollBar scrollBar;
 	public TextBox searchBox;
 	private String title;
 
-	public GuiShop(Shop s)
+	public GuiShop(Shop s, boolean e)
 	{
 		shop = s;
-		selectedTab = shop.tabs.get(Math.min(selectedTabIndex, shop.tabs.size() - 1));
+		canEdit = e;
+		selectedTab = shop.tabs.isEmpty() ? null : shop.tabs.get(0);
 		title = TextFormatting.UNDERLINE + I18n.format("sidebar_button.ftbmoney.shop");
 
 		panelButtons = new PanelShopEntryButtons(this);
 		panelButtons.setPosAndSize(9, 9, 0, 146);
+
+		panelTabs = new PanelTabs(this);
+		panelTabs.setPosAndSize(-19, 6, 20, 200);
 
 		scrollBar = new PanelScrollBar(this, panelButtons);
 		scrollBar.setCanAlwaysScroll(true);
@@ -55,6 +59,7 @@ public class GuiShop extends GuiBase
 	public void addWidgets()
 	{
 		add(panelButtons);
+		add(panelTabs);
 		add(scrollBar);
 		add(searchBox);
 	}
@@ -63,15 +68,20 @@ public class GuiShop extends GuiBase
 	public void alignWidgets()
 	{
 		panelButtons.alignWidgets();
+		panelTabs.alignWidgets();
 	}
 
 	@Override
 	public void drawBackground(Theme theme, int x, int y, int w, int h)
 	{
 		super.drawBackground(theme, x, y, w, h);
-		theme.drawString(title, x + (width - theme.getStringWidth(title)) / 2, y - (theme.getFontHeight() - 2) * 3, Theme.SHADOW);
+		theme.drawString(title, x + (width - theme.getStringWidth(title)) / 2, y - 23, Theme.SHADOW);
 		String balance = TextFormatting.GOLD + FTBMoney.moneyString(FTBMoney.getMoney(Minecraft.getMinecraft().player));
-		theme.drawString(balance, x + (width - theme.getStringWidth(balance)) - 2, y - theme.getFontHeight() - 2, Theme.SHADOW);
-		theme.drawString(selectedTab.title, x + 2, y - theme.getFontHeight() - 2, Theme.SHADOW);
+		theme.drawString(balance, x + (width - theme.getStringWidth(balance)) - 2, y - 10, Theme.SHADOW);
+
+		if (selectedTab != null)
+		{
+			theme.drawString(selectedTab.title, x + 2, y - 10, Theme.SHADOW);
+		}
 	}
 }

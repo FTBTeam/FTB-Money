@@ -11,7 +11,7 @@ import com.feed_the_beast.mods.money.shop.ShopEntry;
  */
 public class PanelShopEntryButtons extends Panel
 {
-	private final GuiShop guiShop;
+	public final GuiShop guiShop;
 
 	public PanelShopEntryButtons(GuiShop g)
 	{
@@ -31,9 +31,17 @@ public class PanelShopEntryButtons extends Panel
 	@Override
 	public void addWidgets()
 	{
-		for (ShopEntry entry : guiShop.selectedTab.entries)
+		if (guiShop.selectedTab != null)
 		{
-			add(new ButtonShopEntry(this, entry));
+			for (ShopEntry entry : guiShop.selectedTab.entries)
+			{
+				add(new ButtonShopEntry(this, entry));
+			}
+		}
+
+		if (guiShop.canEdit)
+		{
+			add(new ButtonAddEntry(this));
 		}
 	}
 

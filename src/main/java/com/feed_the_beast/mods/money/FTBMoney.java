@@ -4,7 +4,6 @@ import com.feed_the_beast.ftblib.FTBLib;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.mods.money.command.CommandMoney;
 import com.feed_the_beast.mods.money.command.CommandSetMoney;
-import com.feed_the_beast.mods.money.command.CommandShop;
 import com.feed_the_beast.mods.money.net.FTBMoneyNetHandler;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
@@ -40,6 +40,11 @@ public class FTBMoney
 	public void onPreInit(FMLPreInitializationEvent event)
 	{
 		FTBMoneyNetHandler.init();
+	}
+
+	@Mod.EventHandler
+	public void onInit(FMLInitializationEvent event)
+	{
 		PermissionAPI.registerNode(PERM_EDIT_SHOP, DefaultPermissionLevel.OP, "Allows to edit FTB Money shop");
 	}
 
@@ -48,7 +53,6 @@ public class FTBMoney
 	{
 		event.registerServerCommand(new CommandMoney());
 		event.registerServerCommand(new CommandSetMoney());
-		event.registerServerCommand(new CommandShop());
 	}
 
 	public static long getMoney(EntityPlayer player)

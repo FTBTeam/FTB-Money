@@ -6,7 +6,6 @@ import com.feed_the_beast.ftblib.lib.net.MessageToServer;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
-import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.server.permission.PermissionAPI;
@@ -14,19 +13,17 @@ import net.minecraftforge.server.permission.PermissionAPI;
 /**
  * @author LatvianModder
  */
-public class MessageDeleteShopEntry extends MessageToServer
+public class MessageDeleteShopTab extends MessageToServer
 {
-	private int tab;
 	private int id;
 
-	public MessageDeleteShopEntry()
+	public MessageDeleteShopTab()
 	{
 	}
 
-	public MessageDeleteShopEntry(ShopEntry e)
+	public MessageDeleteShopTab(ShopTab t)
 	{
-		tab = e.tab.getIndex();
-		id = e.getIndex();
+		id = t.getIndex();
 	}
 
 	@Override
@@ -38,14 +35,12 @@ public class MessageDeleteShopEntry extends MessageToServer
 	@Override
 	public void writeData(DataOut data)
 	{
-		data.writeVarInt(tab);
 		data.writeVarInt(id);
 	}
 
 	@Override
 	public void readData(DataIn data)
 	{
-		tab = data.readVarInt();
 		id = data.readVarInt();
 	}
 
@@ -54,9 +49,9 @@ public class MessageDeleteShopEntry extends MessageToServer
 	{
 		if (PermissionAPI.hasPermission(player, FTBMoney.PERM_EDIT_SHOP))
 		{
-			ShopTab t = Shop.SERVER.tabs.get(tab);
-			t.entries.remove(id);
-			t.shop.markDirty();
+			ShopTab tab = Shop.SERVER.tabs.get(id);
+			tab.shop.tabs.remove(tab);
+			tab.shop.markDirty();
 		}
 	}
 }

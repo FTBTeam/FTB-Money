@@ -1,12 +1,13 @@
 package com.feed_the_beast.mods.money.gui;
 
-import com.feed_the_beast.ftblib.lib.client.ClientUtils;
+import com.feed_the_beast.ftblib.lib.config.ConfigInt;
 import com.feed_the_beast.ftblib.lib.gui.Button;
 import com.feed_the_beast.ftblib.lib.gui.ContextMenuItem;
 import com.feed_the_beast.ftblib.lib.gui.GuiHelper;
 import com.feed_the_beast.ftblib.lib.gui.GuiIcons;
 import com.feed_the_beast.ftblib.lib.gui.Panel;
 import com.feed_the_beast.ftblib.lib.gui.Theme;
+import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Color4I;
 import com.feed_the_beast.ftblib.lib.icon.ItemIcon;
 import com.feed_the_beast.ftblib.lib.util.misc.MouseButton;
@@ -29,9 +30,9 @@ public class ButtonShopEntry extends Button
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
-		super(panel, e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
+		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
-		setWidth(panel.getGui().getTheme().getStringWidth(title) + 28);
+		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
 		setHeight(24);
 	}
 
@@ -39,30 +40,42 @@ public class ButtonShopEntry extends Button
 	public void onClicked(MouseButton button)
 	{
 		GuiHelper.playClickSound();
+		GuiShop gui = (GuiShop) getGui();
 
 		if (button.isLeft())
 		{
-			new MessageBuy(entry.netID, isShiftKeyDown() ? entry.stack.getMaxStackSize() : 1).sendToServer();
+			if (isShiftKeyDown())
+			{
+				new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
+					gui.openGui();
+
+					if (set)
+					{
+						new MessageBuy(entry, value.getInt()).sendToServer();
+					}
+				}).openGui();
+			}
+			else
+			{
+				new MessageBuy(entry, 1).sendToServer();
+			}
 		}
-		else if (button.isRight() && ClientUtils.isClientOP())
+		else if (button.isRight() && gui.canEdit)
 		{
 			List<ContextMenuItem> contextMenu = new ArrayList<>();
-			contextMenu.add(new ContextMenuItem(I18n.format("selectServer.delete"), GuiIcons.REMOVE, () -> {
+			contextMenu.add(new ContextMenuItem(I18n.format("selectServer.delete"), GuiIcons.REMOVE, () -> gui.openYesNo(I18n.format("delete_item", entry.stack.getDisplayName()), "", () -> {
+				new MessageDeleteShopEntry(entry).sendToServer();
 				entry.tab.entries.remove(entry);
-				getGui().refreshWidgets();
-				new MessageDeleteShopEntry(entry.netID).sendToServer();
-			}));
-			getGui().openContextMenu(contextMenu);
+				gui.refreshWidgets();
+			})));
+			gui.openContextMenu(contextMenu);
 		}
 	}
 
 	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		if (getGui().getTheme().getStringWidth(getTitle()) + 28 > width)
-		{
-			list.add(getTitle());
-		}
+		GuiHelper.addStackTooltip(entry.stack, list, "");
 	}
 
 	@Override
@@ -71,7 +84,7 @@ public class ButtonShopEntry extends Button
 		drawBackground(theme, x, y, w, h);
 		String t = title;
 
-		int mw = w - 30;
+		int mw = w - 24;
 
 		if (theme.getStringWidth(t) > mw)
 		{

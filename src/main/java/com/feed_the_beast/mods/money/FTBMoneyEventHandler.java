@@ -3,10 +3,7 @@ package com.feed_the_beast.mods.money;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
-import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
@@ -44,16 +41,6 @@ public class FTBMoneyEventHandler
 			if (nbt != null)
 			{
 				Shop.SERVER.deserializeNBT(nbt);
-			}
-
-			if (Shop.SERVER.tabs.isEmpty())
-			{
-				ShopTab tab = new ShopTab(Shop.SERVER);
-				tab.title = "Misc";
-				tab.icon = new ItemStack(Items.EMERALD);
-				tab.netID = ++Shop.SERVER.nextNetID;
-				Shop.SERVER.tabs.add(tab);
-				Shop.SERVER.markDirty();
 			}
 		}
 	}

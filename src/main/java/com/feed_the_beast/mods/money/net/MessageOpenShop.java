@@ -1,31 +1,14 @@
 package com.feed_the_beast.mods.money.net;
 
-import com.feed_the_beast.ftblib.lib.io.DataIn;
-import com.feed_the_beast.ftblib.lib.io.DataOut;
-import com.feed_the_beast.ftblib.lib.net.MessageToClient;
+import com.feed_the_beast.ftblib.lib.net.MessageToServer;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
-import com.feed_the_beast.mods.money.gui.GuiShop;
-import com.feed_the_beast.mods.money.shop.Shop;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
  * @author LatvianModder
  */
-public class MessageOpenShop extends MessageToClient
+public class MessageOpenShop extends MessageToServer
 {
-	private NBTTagCompound nbt;
-
-	public MessageOpenShop()
-	{
-	}
-
-	public MessageOpenShop(Shop s)
-	{
-		nbt = s.serializeNBT();
-	}
-
 	@Override
 	public NetworkWrapper getWrapper()
 	{
@@ -33,23 +16,8 @@ public class MessageOpenShop extends MessageToClient
 	}
 
 	@Override
-	public void writeData(DataOut data)
+	public void onMessage(EntityPlayerMP player)
 	{
-		data.writeNBT(nbt);
-	}
-
-	@Override
-	public void readData(DataIn data)
-	{
-		nbt = data.readNBT();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void onMessage()
-	{
-		Shop shop = new Shop();
-		shop.deserializeNBT(nbt);
-		new GuiShop(shop).openGui();
+		new MessageOpenShopResponse(player).sendTo(player);
 	}
 }
