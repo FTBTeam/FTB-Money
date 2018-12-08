@@ -75,7 +75,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		GuiHelper.addStackTooltip(entry.stack, list, "");
+		GuiHelper.addStackTooltip(entry.stack, list);
 	}
 
 	@Override
