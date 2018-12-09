@@ -7,6 +7,7 @@ import com.feed_the_beast.ftblib.lib.gui.GuiHelper;
 import com.feed_the_beast.ftblib.lib.gui.GuiIcons;
 import com.feed_the_beast.ftblib.lib.gui.Panel;
 import com.feed_the_beast.ftblib.lib.gui.Theme;
+import com.feed_the_beast.ftblib.lib.gui.WidgetType;
 import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Color4I;
 import com.feed_the_beast.ftblib.lib.icon.ItemIcon;
@@ -27,11 +28,13 @@ import java.util.List;
 public class ButtonShopEntry extends Button
 {
 	public final ShopEntry entry;
+	public final boolean locked;
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
 		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
+		locked = ((GuiShop) panel.getGui()).locked.contains(entry);
 		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
 		setHeight(24);
 	}
@@ -44,20 +47,23 @@ public class ButtonShopEntry extends Button
 
 		if (button.isLeft())
 		{
-			if (isShiftKeyDown())
+			if (!locked || gui.canEdit)
 			{
-				new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
-					gui.openGui();
+				if (isShiftKeyDown())
+				{
+					new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
+						gui.openGui();
 
-					if (set)
-					{
-						new MessageBuy(entry, value.getInt()).sendToServer();
-					}
-				}).openGui();
-			}
-			else
-			{
-				new MessageBuy(entry, 1).sendToServer();
+						if (set)
+						{
+							new MessageBuy(entry, value.getInt()).sendToServer();
+						}
+					}).openGui();
+				}
+				else
+				{
+					new MessageBuy(entry, 1).sendToServer();
+				}
 			}
 		}
 		else if (button.isRight() && gui.canEdit)
@@ -73,15 +79,45 @@ public class ButtonShopEntry extends Button
 	}
 
 	@Override
+	public WidgetType getWidgetType()
+	{
+		if (locked && !((GuiShop) getGui()).canEdit)
+		{
+			return WidgetType.DISABLED;
+		}
+
+		return super.getWidgetType();
+	}
+
+	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		GuiHelper.addStackTooltip(entry.stack, list);
+		boolean canEdit = ((GuiShop) getGui()).canEdit;
+
+		if (locked && canEdit)
+		{
+			list.add("Locked!");
+		}
+
+		if (!locked || canEdit)
+		{
+			GuiHelper.addStackTooltip(entry.stack, list);
+		}
 	}
 
 	@Override
 	public void draw(Theme theme, int x, int y, int w, int h)
 	{
 		drawBackground(theme, x, y, w, h);
+
+		if (locked && !((GuiShop) getGui()).canEdit)
+		{
+			GuiIcons.LOCK.draw(x + 4, y + 4, 16, 16);
+			theme.drawString("???", x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
+			theme.drawString(TextFormatting.GOLD + "\u0398 " + TextFormatting.OBFUSCATED + "000,000,000", x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+			return;
+		}
+
 		String t = title;
 
 		int mw = w - 24;

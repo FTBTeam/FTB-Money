@@ -7,6 +7,10 @@ import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.gui.GuiShop;
 import com.feed_the_beast.mods.money.shop.Shop;
+import com.feed_the_beast.mods.money.shop.ShopEntry;
+import com.feed_the_beast.mods.money.shop.ShopTab;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,6 +24,7 @@ public class MessageOpenShopResponse extends MessageToClient
 {
 	private NBTTagCompound nbt;
 	private boolean canEdit;
+	private int[] locked;
 
 	public MessageOpenShopResponse()
 	{
@@ -29,6 +34,24 @@ public class MessageOpenShopResponse extends MessageToClient
 	{
 		nbt = Shop.SERVER.serializeNBT();
 		canEdit = PermissionAPI.hasPermission(player, FTBMoney.PERM_EDIT_SHOP);
+
+		IntArrayList list = new IntArrayList();
+		int i = 0;
+
+		for (ShopTab tab : Shop.SERVER.tabs)
+		{
+			for (ShopEntry entry : tab.entries)
+			{
+				if (!entry.lock.isEmpty() && !entry.isUnlocked(player))
+				{
+					list.add(i);
+				}
+
+				i++;
+			}
+		}
+
+		locked = list.toIntArray();
 	}
 
 	@Override
@@ -42,6 +65,12 @@ public class MessageOpenShopResponse extends MessageToClient
 	{
 		data.writeNBT(nbt);
 		data.writeBoolean(canEdit);
+		data.writeVarInt(locked.length);
+
+		for (int i : locked)
+		{
+			data.writeVarInt(i);
+		}
 	}
 
 	@Override
@@ -49,6 +78,12 @@ public class MessageOpenShopResponse extends MessageToClient
 	{
 		nbt = data.readNBT();
 		canEdit = data.readBoolean();
+		locked = new int[data.readVarInt()];
+
+		for (int i = 0; i < locked.length; i++)
+		{
+			locked[i] = data.readVarInt();
+		}
 	}
 
 	@Override
@@ -57,6 +92,6 @@ public class MessageOpenShopResponse extends MessageToClient
 	{
 		Shop shop = new Shop();
 		shop.deserializeNBT(nbt);
-		new GuiShop(shop, canEdit).openGui();
+		new GuiShop(shop, canEdit, new IntOpenHashSet(locked)).openGui();
 	}
 }

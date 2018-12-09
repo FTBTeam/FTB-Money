@@ -7,10 +7,14 @@ import com.feed_the_beast.ftblib.lib.gui.TextBox;
 import com.feed_the_beast.ftblib.lib.gui.Theme;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
+import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.HashSet;
 
 /**
  * @author LatvianModder
@@ -19,6 +23,7 @@ public class GuiShop extends GuiBase
 {
 	public final Shop shop;
 	public final boolean canEdit;
+	public final HashSet<ShopEntry> locked;
 	public ShopTab selectedTab;
 	public final Panel panelButtons;
 	public final Panel panelTabs;
@@ -26,10 +31,27 @@ public class GuiShop extends GuiBase
 	public TextBox searchBox;
 	private String title;
 
-	public GuiShop(Shop s, boolean e)
+	public GuiShop(Shop s, boolean e, IntOpenHashSet l)
 	{
 		shop = s;
 		canEdit = e;
+		locked = new HashSet<>();
+
+		int i = 0;
+
+		for (ShopTab tab : shop.tabs)
+		{
+			for (ShopEntry entry : tab.entries)
+			{
+				if (l.contains(i))
+				{
+					locked.add(entry);
+				}
+
+				i++;
+			}
+		}
+
 		selectedTab = shop.tabs.isEmpty() ? null : shop.tabs.get(0);
 		title = TextFormatting.UNDERLINE + I18n.format("sidebar_button.ftbmoney.shop");
 

@@ -61,7 +61,7 @@ public class MessageBuy extends MessageToServer
 		ShopEntry entry = t.entries.get(id);
 		long money = FTBMoney.getMoney(player);
 
-		if (money >= entry.buy * count)
+		if (money >= entry.buy * count && entry.isUnlocked(player))
 		{
 			ItemStack stack = entry.stack;
 
