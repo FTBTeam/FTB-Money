@@ -8,3 +8,8 @@ sidebar_button.ftbmoney.shop=Shop
 ftbmoney.balance=Balance
 ftbmoney.buy=Buy
 ftbmoney.sell=Sell
+
+ftbmoney.shop.entry.item=Item
+ftbmoney.shop.entry.buy=Buy Price
+ftbmoney.shop.entry.sell=Sell Price
+ftbmoney.shop.entry.lock=Lock

@@ -1,5 +1,6 @@
 package com.feed_the_beast.mods.money.gui;
 
+import com.feed_the_beast.ftblib.lib.config.ConfigGroup;
 import com.feed_the_beast.ftblib.lib.config.ConfigInt;
 import com.feed_the_beast.ftblib.lib.gui.Button;
 import com.feed_the_beast.ftblib.lib.gui.ContextMenuItem;
@@ -8,15 +9,18 @@ import com.feed_the_beast.ftblib.lib.gui.GuiIcons;
 import com.feed_the_beast.ftblib.lib.gui.Panel;
 import com.feed_the_beast.ftblib.lib.gui.Theme;
 import com.feed_the_beast.ftblib.lib.gui.WidgetType;
+import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfig;
 import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Color4I;
 import com.feed_the_beast.ftblib.lib.icon.ItemIcon;
 import com.feed_the_beast.ftblib.lib.util.misc.MouseButton;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.net.MessageBuy;
-import com.feed_the_beast.mods.money.net.MessageDeleteShopEntry;
+import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
+import com.feed_the_beast.mods.money.net.MessageMoveShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
@@ -69,11 +73,47 @@ public class ButtonShopEntry extends Button
 		else if (button.isRight() && gui.canEdit)
 		{
 			List<ContextMenuItem> contextMenu = new ArrayList<>();
+
+			contextMenu.add(new ContextMenuItem(I18n.format("selectServer.edit"), GuiIcons.SETTINGS, () -> {
+				ConfigGroup group = ConfigGroup.newGroup("ftbmoney").setDisplayName(new TextComponentTranslation("sidebar_button.ftbmoney.shop"));
+				ConfigGroup g = group.getGroup("shop").getGroup("entry");
+				entry.getConfig(g);
+				new GuiEditConfig(group, (g1, sender) -> new MessageEditShopEntry(entry, false).sendToServer()).openGui();
+				gui.refreshWidgets();
+			}));
+
+			contextMenu.add(new ContextMenuItem(I18n.format("gui.move"), GuiIcons.UP, () -> {
+				new MessageMoveShopEntry(entry, true).sendToServer();
+				int id = entry.getIndex();
+
+				if (id > 0)
+				{
+					entry.tab.entries.remove(id);
+					entry.tab.entries.add(id - 1, entry);
+				}
+
+				gui.refreshWidgets();
+			}));
+
+			contextMenu.add(new ContextMenuItem(I18n.format("gui.move"), GuiIcons.DOWN, () -> {
+				new MessageMoveShopEntry(entry, false).sendToServer();
+				int id = entry.getIndex();
+
+				if (id < entry.tab.entries.size() - 1)
+				{
+					entry.tab.entries.remove(id);
+					entry.tab.entries.add(id + 1, entry);
+				}
+
+				gui.refreshWidgets();
+			}));
+
 			contextMenu.add(new ContextMenuItem(I18n.format("selectServer.delete"), GuiIcons.REMOVE, () -> gui.openYesNo(I18n.format("delete_item", entry.stack.getDisplayName()), "", () -> {
-				new MessageDeleteShopEntry(entry).sendToServer();
+				new MessageEditShopEntry(entry, true).sendToServer();
 				entry.tab.entries.remove(entry);
 				gui.refreshWidgets();
 			})));
+
 			gui.openContextMenu(contextMenu);
 		}
 	}
