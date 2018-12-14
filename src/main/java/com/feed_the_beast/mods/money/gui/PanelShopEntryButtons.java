@@ -5,6 +5,7 @@ import com.feed_the_beast.ftblib.lib.gui.Theme;
 import com.feed_the_beast.ftblib.lib.gui.Widget;
 import com.feed_the_beast.ftblib.lib.gui.WidgetLayout;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
+import com.feed_the_beast.mods.money.shop.ShopTab;
 
 /**
  * @author LatvianModder
@@ -31,7 +32,17 @@ public class PanelShopEntryButtons extends Panel
 	@Override
 	public void addWidgets()
 	{
-		if (guiShop.selectedTab != null)
+		if (!guiShop.searchBox.getText().isEmpty())
+		{
+			for (ShopTab tab : guiShop.shop.tabs)
+			{
+				for (ShopEntry entry : tab.entries)
+				{
+					add(new ButtonShopEntry(this, entry));
+				}
+			}
+		}
+		else if (guiShop.selectedTab != null)
 		{
 			for (ShopEntry entry : guiShop.selectedTab.entries)
 			{
