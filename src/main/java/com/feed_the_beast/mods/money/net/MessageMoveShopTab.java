@@ -13,17 +13,19 @@ import net.minecraftforge.server.permission.PermissionAPI;
 /**
  * @author LatvianModder
  */
-public class MessageDeleteShopTab extends MessageToServer
+public class MessageMoveShopTab extends MessageToServer
 {
-	private int id;
+	private int tab;
+	private boolean up;
 
-	public MessageDeleteShopTab()
+	public MessageMoveShopTab()
 	{
 	}
 
-	public MessageDeleteShopTab(ShopTab t)
+	public MessageMoveShopTab(ShopTab t, boolean u)
 	{
-		id = t.getIndex();
+		tab = t.getIndex();
+		up = u;
 	}
 
 	@Override
@@ -35,13 +37,15 @@ public class MessageDeleteShopTab extends MessageToServer
 	@Override
 	public void writeData(DataOut data)
 	{
-		data.writeVarInt(id);
+		data.writeVarInt(tab);
+		data.writeBoolean(up);
 	}
 
 	@Override
 	public void readData(DataIn data)
 	{
-		id = data.readVarInt();
+		tab = data.readVarInt();
+		up = data.readBoolean();
 	}
 
 	@Override
@@ -49,9 +53,15 @@ public class MessageDeleteShopTab extends MessageToServer
 	{
 		if (PermissionAPI.hasPermission(player, FTBMoney.PERM_EDIT_SHOP))
 		{
-			ShopTab tab = Shop.SERVER.tabs.get(id);
-			tab.shop.tabs.remove(tab);
-			tab.shop.markDirty();
+			ShopTab t = Shop.SERVER.tabs.get(tab);
+
+			if (up ? (tab > 0) : (tab < t.entries.size() - 1))
+			{
+				Shop.SERVER.tabs.remove(tab);
+				Shop.SERVER.tabs.add(up ? tab - 1 : tab + 1, t);
+			}
+
+			t.shop.markDirty();
 		}
 	}
 }

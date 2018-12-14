@@ -16,10 +16,11 @@ public class FTBMoneyNetHandler
 		NET.register(new MessageOpenShop());
 		NET.register(new MessageOpenShopResponse());
 		NET.register(new MessageBuy());
+		NET.register(new MessageAddShopTab());
+		NET.register(new MessageEditShopTab());
+		NET.register(new MessageMoveShopTab());
 		NET.register(new MessageAddShopEntry());
 		NET.register(new MessageEditShopEntry());
-		NET.register(new MessageAddShopTab());
-		NET.register(new MessageDeleteShopTab());
 		NET.register(new MessageMoveShopEntry());
 	}
 }

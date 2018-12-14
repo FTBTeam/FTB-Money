@@ -1,5 +1,7 @@
 package com.feed_the_beast.mods.money.shop;
 
+import com.feed_the_beast.ftblib.lib.config.ConfigGroup;
+import com.feed_the_beast.ftblib.lib.config.ConfigItemStack;
 import com.feed_the_beast.ftblib.lib.item.ItemStackSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +20,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	public final Shop shop;
 	public String title = "";
 	public ItemStack icon = ItemStack.EMPTY;
+	public String lock = "";
 	public final List<ShopEntry> entries = new ArrayList<>();
 
 	public ShopTab(Shop s)
@@ -25,13 +28,31 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 		shop = s;
 	}
 
-	@Override
-	public NBTTagCompound serializeNBT()
+	public NBTTagCompound serializeSettings()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setString("title", title);
 		nbt.setTag("icon", ItemStackSerializer.write(icon, false));
 
+		if (!lock.isEmpty())
+		{
+			nbt.setString("lock", lock);
+		}
+
+		return nbt;
+	}
+
+	public void deserializeSettings(NBTTagCompound nbt)
+	{
+		title = nbt.getString("title");
+		icon = ItemStackSerializer.read(nbt.getTag("icon"));
+		lock = nbt.getString("lock");
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT()
+	{
+		NBTTagCompound nbt = serializeSettings();
 		NBTTagList e = new NBTTagList();
 
 		for (ShopEntry entry : entries)
@@ -46,8 +67,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
-		title = nbt.getString("title");
-		icon = ItemStackSerializer.read(nbt.getTag("icon"));
+		deserializeSettings(nbt);
 		entries.clear();
 		NBTTagList e = nbt.getTagList("entries", Constants.NBT.TAG_COMPOUND);
 
@@ -66,5 +86,11 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	public int getIndex()
 	{
 		return shop.tabs.indexOf(this);
+	}
+
+	public void getConfig(ConfigGroup config)
+	{
+		config.addString("title", () -> title, v -> title = v, "");
+		config.add("icon", new ConfigItemStack.SimpleStack(() -> icon, v -> icon = v), new ConfigItemStack(ItemStack.EMPTY));
 	}
 }
