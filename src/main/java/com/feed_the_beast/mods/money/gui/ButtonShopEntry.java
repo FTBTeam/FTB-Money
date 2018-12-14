@@ -53,21 +53,14 @@ public class ButtonShopEntry extends Button
 		{
 			if (!locked || gui.canEdit)
 			{
-				if (isShiftKeyDown())
-				{
-					new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
-						gui.openGui();
+				new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
+					gui.openGui();
 
-						if (set)
-						{
-							new MessageBuy(entry, value.getInt()).sendToServer();
-						}
-					}).openGui();
-				}
-				else
-				{
-					new MessageBuy(entry, 1).sendToServer();
-				}
+					if (set)
+					{
+						new MessageBuy(entry, value.getInt()).sendToServer();
+					}
+				}).openGui();
 			}
 		}
 		else if (button.isRight() && gui.canEdit)
