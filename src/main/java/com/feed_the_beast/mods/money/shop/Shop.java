@@ -1,5 +1,6 @@
 package com.feed_the_beast.mods.money.shop;
 
+import com.feed_the_beast.ftbquests.quest.QuestFile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
@@ -19,8 +20,14 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 
 	public static Shop SERVER;
 
+	public final QuestFile file;
 	public final List<ShopTab> tabs = new ArrayList<>();
 	public boolean shouldSave = false;
+
+	public Shop(QuestFile f)
+	{
+		file = f;
+	}
 
 	@Override
 	public NBTTagCompound serializeNBT()

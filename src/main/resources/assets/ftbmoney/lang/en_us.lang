@@ -13,6 +13,9 @@ ftbmoney.shop.entry.buy=Buy Price
 ftbmoney.shop.entry.sell=Sell Price
 ftbmoney.shop.entry.lock=Lock
 
+ftbquests.task.ftbmoney.money=Money
+ftbquests.reward.ftbmoney.money=Money
+
 commands.ftbmoney.money.usage=/money
 commands.ftbmoney.setmoney.usage=/setmoney <player> <amount>
 commands.ftbmoney.setmoney.add=Added %s to %s's balance

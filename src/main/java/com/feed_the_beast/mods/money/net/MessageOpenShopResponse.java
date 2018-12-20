@@ -4,6 +4,7 @@ import com.feed_the_beast.ftblib.lib.io.DataIn;
 import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftblib.lib.net.MessageToClient;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
+import com.feed_the_beast.ftbquests.client.ClientQuestFile;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.gui.GuiShop;
 import com.feed_the_beast.mods.money.shop.Shop;
@@ -90,7 +91,7 @@ public class MessageOpenShopResponse extends MessageToClient
 	@SideOnly(Side.CLIENT)
 	public void onMessage()
 	{
-		Shop shop = new Shop();
+		Shop shop = new Shop(ClientQuestFile.INSTANCE);
 		shop.deserializeNBT(nbt);
 		new GuiShop(shop, canEdit, new IntOpenHashSet(locked)).openGui();
 	}

@@ -36,11 +36,12 @@ minecraft {
 }
 
 repositories {
-	maven { url "https://maven.latmod.com/" } //FTBLib
+	maven { url "https://maven.latmod.com/" } //FTBLib, FTB Quests
 }
 
 dependencies {
 	deobfCompile "com.feed_the_beast.mods:FTBLib:${ftblib_version}"
+	deobfCompile "com.feed_the_beast.mods:FTBQuests:${ftbquests_version}"
 }
 
 processResources {
@@ -80,6 +81,7 @@ if (ENV.CURSEFORGE_KEY) {
 			addGameVersion "${mc_version}"
 			relations {
 				requiredDependency 'ftblib'
+				requiredDependency 'ftb-quests'
 			}
 			changelog = getGitChangelog
 			changelogType = 'markdown'
