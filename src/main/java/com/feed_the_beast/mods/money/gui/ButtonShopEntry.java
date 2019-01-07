@@ -53,7 +53,7 @@ public class ButtonShopEntry extends Button
 		{
 			if (!locked || gui.canEdit)
 			{
-				new GuiEditConfigValue("count", new ConfigInt(entry.stack.getMaxStackSize(), 1, 1024), (value, set) -> {
+				new GuiEditConfigValue("count", new ConfigInt(1, 1, 1024), (value, set) -> {
 					gui.openGui();
 
 					if (set)
