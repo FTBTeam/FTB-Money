@@ -36,12 +36,13 @@ minecraft {
 }
 
 repositories {
-	maven { url "https://maven.latmod.com/" } //FTBLib, FTB Quests
+	maven { url "https://maven.latmod.com/" } //FTBLib, FTB Quests, Item Filters
 }
 
 dependencies {
 	deobfCompile "com.feed_the_beast.mods:FTBLib:${ftblib_version}"
 	deobfCompile "com.feed_the_beast.mods:FTBQuests:${ftbquests_version}"
+	deobfCompile "com.latmod.mods:ItemFilters:${itemfilters_version}"
 }
 
 processResources {
