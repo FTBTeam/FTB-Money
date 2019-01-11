@@ -2,7 +2,7 @@ package com.feed_the_beast.mods.money.shop;
 
 import com.feed_the_beast.ftblib.lib.config.ConfigGroup;
 import com.feed_the_beast.ftblib.lib.config.ConfigItemStack;
-import com.feed_the_beast.ftblib.lib.item.ItemStackSerializer;
+import com.latmod.mods.itemfilters.item.ItemStackSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

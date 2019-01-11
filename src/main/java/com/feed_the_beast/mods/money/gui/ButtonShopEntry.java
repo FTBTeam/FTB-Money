@@ -14,15 +14,19 @@ import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Color4I;
 import com.feed_the_beast.ftblib.lib.icon.ItemIcon;
 import com.feed_the_beast.ftblib.lib.util.misc.MouseButton;
+import com.feed_the_beast.ftbquests.client.ClientQuestFile;
+import com.feed_the_beast.ftbquests.quest.QuestObject;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.net.MessageBuy;
 import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
 import com.feed_the_beast.mods.money.net.MessageMoveShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +55,9 @@ public class ButtonShopEntry extends Button
 
 		if (button.isLeft())
 		{
-			if (!locked || gui.canEdit)
+			if (!locked || entry.tab.shop.file.canEdit())
 			{
-				new GuiEditConfigValue("count", new ConfigInt(1, 1, 1024), (value, set) -> {
+				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
 					gui.openGui();
 
 					if (set)
@@ -63,7 +67,7 @@ public class ButtonShopEntry extends Button
 				}).openGui();
 			}
 		}
-		else if (button.isRight() && gui.canEdit)
+		else if (button.isRight() && entry.tab.shop.file.canEdit())
 		{
 			List<ContextMenuItem> contextMenu = new ArrayList<>();
 
@@ -114,7 +118,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public WidgetType getWidgetType()
 	{
-		if (locked && !((GuiShop) getGui()).canEdit)
+		if (locked && !entry.tab.shop.file.canEdit())
 		{
 			return WidgetType.DISABLED;
 		}
@@ -125,14 +129,18 @@ public class ButtonShopEntry extends Button
 	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		boolean canEdit = ((GuiShop) getGui()).canEdit;
-
-		if (locked && canEdit)
+		if (locked)
 		{
 			list.add("Locked!");
+			QuestObject object = ClientQuestFile.INSTANCE.get(entry.lock);
+
+			if (object != null)
+			{
+				list.add("Requires: " + object.getObjectType().getColor() + object.getDisplayName().getFormattedText());
+			}
 		}
 
-		if (!locked || canEdit)
+		if (!locked || entry.tab.shop.file.canEdit())
 		{
 			GuiHelper.addStackTooltip(entry.stack, list);
 		}
@@ -143,7 +151,7 @@ public class ButtonShopEntry extends Button
 	{
 		drawBackground(theme, x, y, w, h);
 
-		if (locked && !((GuiShop) getGui()).canEdit)
+		if (locked && !entry.tab.shop.file.canEdit())
 		{
 			GuiIcons.LOCK.draw(x + 4, y + 4, 16, 16);
 			theme.drawString("???", x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
@@ -163,5 +171,12 @@ public class ButtonShopEntry extends Button
 		drawIcon(theme, x + 4, y + 4, 16, 16);
 		theme.drawString(t, x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
 		theme.drawString(TextFormatting.GOLD + FTBMoney.moneyString(entry.buy), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+	}
+
+	@Override
+	@Nullable
+	public Object getJEIFocus()
+	{
+		return locked ? null : entry.stack;
 	}
 }

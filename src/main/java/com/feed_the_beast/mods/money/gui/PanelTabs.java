@@ -1,6 +1,5 @@
 package com.feed_the_beast.mods.money.gui;
 
-import com.feed_the_beast.ftblib.lib.client.ClientUtils;
 import com.feed_the_beast.ftblib.lib.gui.Panel;
 import com.feed_the_beast.ftblib.lib.gui.WidgetLayout;
 import com.feed_the_beast.mods.money.shop.ShopTab;
@@ -26,7 +25,7 @@ public class PanelTabs extends Panel
 			add(new ButtonTab(this, tab));
 		}
 
-		if (guiShop.shop.tabs.size() < 8 && ClientUtils.isClientOP())
+		if (guiShop.shop.tabs.size() < 8 && guiShop.shop.file.canEdit())
 		{
 			add(new ButtonAddTab(this));
 		}

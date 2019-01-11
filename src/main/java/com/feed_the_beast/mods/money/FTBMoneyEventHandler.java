@@ -1,14 +1,11 @@
 package com.feed_the_beast.mods.money;
 
 import com.feed_the_beast.ftblib.lib.config.ConfigString;
-import com.feed_the_beast.ftblib.lib.data.FTBLibAPI;
 import com.feed_the_beast.ftblib.lib.gui.IOpenableGui;
 import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Icon;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
-import com.feed_the_beast.ftbquests.quest.ITeamData;
 import com.feed_the_beast.ftbquests.quest.Quest;
-import com.feed_the_beast.ftbquests.quest.QuestObject;
 import com.feed_the_beast.ftbquests.quest.ServerQuestFile;
 import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
 import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
@@ -24,7 +21,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -130,27 +126,5 @@ public class FTBMoneyEventHandler
 				}).openGui();
 			}
 		});
-	}
-
-	@SubscribeEvent
-	@Optional.Method(modid = "ftbmoney")
-	public static void shopLock(EventShopLock event)
-	{
-		if (event.getLock().startsWith("ftbquests:"))
-		{
-			QuestObject object = ServerQuestFile.INSTANCE.get(ServerQuestFile.INSTANCE.getID(event.getLock().substring(10)));
-
-			if (object == null)
-			{
-				return;
-			}
-
-			ITeamData data = ServerQuestFile.INSTANCE.getData(FTBLibAPI.getTeamID(event.getPlayer().getUniqueID()));
-
-			if (data != null && object.isComplete(data))
-			{
-				event.setCanceled(true);
-			}
-		}
 	}
 }

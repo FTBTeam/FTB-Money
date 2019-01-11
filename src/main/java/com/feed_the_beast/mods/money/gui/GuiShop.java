@@ -22,7 +22,6 @@ import java.util.HashSet;
 public class GuiShop extends GuiBase
 {
 	public final Shop shop;
-	public final boolean canEdit;
 	public final HashSet<ShopEntry> locked;
 	public ShopTab selectedTab;
 	public final Panel panelButtons;
@@ -31,10 +30,9 @@ public class GuiShop extends GuiBase
 	public TextBox searchBox;
 	private String title;
 
-	public GuiShop(Shop s, boolean e, IntOpenHashSet l)
+	public GuiShop(Shop s, IntOpenHashSet l)
 	{
 		shop = s;
-		canEdit = e;
 		locked = new HashSet<>();
 
 		int i = 0;

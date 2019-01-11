@@ -44,7 +44,7 @@ public class ButtonTab extends Button
 			gui.selectedTab = tab;
 			gui.refreshWidgets();
 		}
-		else if (button.isRight() && ((GuiShop) getGui()).canEdit)
+		else if (button.isRight() && tab.shop.file.canEdit())
 		{
 			List<ContextMenuItem> contextMenu = new ArrayList<>();
 

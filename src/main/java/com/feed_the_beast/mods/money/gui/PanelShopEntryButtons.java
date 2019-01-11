@@ -50,7 +50,7 @@ public class PanelShopEntryButtons extends Panel
 			}
 		}
 
-		if (guiShop.canEdit)
+		if (guiShop.shop.file.canEdit())
 		{
 			add(new ButtonAddEntry(this));
 		}

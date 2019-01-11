@@ -1,9 +1,11 @@
 package com.feed_the_beast.mods.money.net;
 
+import com.feed_the_beast.ftblib.lib.data.FTBLibAPI;
 import com.feed_the_beast.ftblib.lib.io.DataIn;
 import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftblib.lib.net.MessageToServer;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
+import com.feed_the_beast.ftbquests.quest.ServerQuestFile;
 import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
@@ -61,7 +63,7 @@ public class MessageBuy extends MessageToServer
 		ShopEntry entry = t.entries.get(id);
 		long money = FTBMoney.getMoney(player);
 
-		if (money >= entry.buy * count && entry.isUnlocked(player))
+		if (money >= entry.buy * count && entry.isUnlocked(ServerQuestFile.INSTANCE.getData(FTBLibAPI.getTeam(player.getUniqueID()))))
 		{
 			ItemStack stack = entry.stack;
 

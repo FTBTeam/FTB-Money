@@ -4,11 +4,10 @@ import com.feed_the_beast.ftblib.lib.io.DataIn;
 import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftblib.lib.net.MessageToServer;
 import com.feed_the_beast.ftblib.lib.net.NetworkWrapper;
-import com.feed_the_beast.mods.money.FTBMoney;
+import com.feed_the_beast.ftbquests.FTBQuests;
 import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.server.permission.PermissionAPI;
 
 /**
  * @author LatvianModder
@@ -51,7 +50,7 @@ public class MessageMoveShopTab extends MessageToServer
 	@Override
 	public void onMessage(EntityPlayerMP player)
 	{
-		if (PermissionAPI.hasPermission(player, FTBMoney.PERM_EDIT_SHOP))
+		if (FTBQuests.canEdit(player))
 		{
 			ShopTab t = Shop.SERVER.tabs.get(tab);
 
