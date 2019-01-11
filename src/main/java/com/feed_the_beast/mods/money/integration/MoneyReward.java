@@ -82,7 +82,11 @@ public class MoneyReward extends QuestReward
 	{
 		long added = value + player.world.rand.nextInt(randomBonus + 1);
 		FTBMoney.setMoney(player, FTBMoney.getMoney(player) + added);
-		new MessageDisplayRewardToast(FTBMoney.moneyComponent(added), Icon.getIcon("ftbmoney:textures/beastcoinmini.png")).sendTo(player);
+
+		if (MessageDisplayRewardToast.ENABLED)
+		{
+			new MessageDisplayRewardToast(FTBMoney.moneyComponent(added), Icon.getIcon("ftbmoney:textures/beastcoinmini.png")).sendTo(player);
+		}
 	}
 
 	@Override
