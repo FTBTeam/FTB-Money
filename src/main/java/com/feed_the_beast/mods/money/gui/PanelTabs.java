@@ -25,7 +25,7 @@ public class PanelTabs extends Panel
 			add(new ButtonTab(this, tab));
 		}
 
-		if (guiShop.shop.tabs.size() < 8 && guiShop.shop.file.canEdit())
+		if (guiShop.shop.file.canEdit())
 		{
 			add(new ButtonAddTab(this));
 		}
