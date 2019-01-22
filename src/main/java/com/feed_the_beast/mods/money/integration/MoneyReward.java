@@ -5,7 +5,7 @@ import com.feed_the_beast.ftblib.lib.icon.Icon;
 import com.feed_the_beast.ftblib.lib.io.DataIn;
 import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftbquests.net.MessageDisplayRewardToast;
-import com.feed_the_beast.ftbquests.quest.Quest;
+import com.feed_the_beast.ftbquests.quest.QuestObjectBase;
 import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
 import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
 import com.feed_the_beast.mods.money.FTBMoney;
@@ -24,9 +24,9 @@ public class MoneyReward extends QuestReward
 	public long value = 1L;
 	public int randomBonus = 0;
 
-	public MoneyReward(Quest quest)
+	public MoneyReward(QuestObjectBase parent)
 	{
-		super(quest);
+		super(parent);
 	}
 
 	@Override
