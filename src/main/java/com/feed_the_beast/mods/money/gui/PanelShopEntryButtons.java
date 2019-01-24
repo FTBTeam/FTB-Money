@@ -48,11 +48,11 @@ public class PanelShopEntryButtons extends Panel
 			{
 				add(new ButtonShopEntry(this, entry));
 			}
-		}
 
-		if (guiShop.shop.file.canEdit())
-		{
-			add(new ButtonAddEntry(this));
+			if (guiShop.shop.file.canEdit())
+			{
+				add(new ButtonAddEntry(this));
+			}
 		}
 	}
 
