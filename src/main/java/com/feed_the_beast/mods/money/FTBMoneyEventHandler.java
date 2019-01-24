@@ -81,6 +81,15 @@ public class FTBMoneyEventHandler
 	}
 
 	@SubscribeEvent
+	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	{
+		if (event.player instanceof EntityPlayerMP)
+		{
+			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
+		}
+	}
+
+	@SubscribeEvent
 	public static void registerTasks(RegistryEvent.Register<QuestTaskType> event)
 	{
 		event.getRegistry().register(MoneyTask.TYPE = new QuestTaskType(MoneyTask::new).setRegistryName("money").setIcon(Icon.getIcon(FTBMoney.MOD_ID + ":textures/beastcoin.png")));
