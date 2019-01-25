@@ -12,6 +12,7 @@ import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
 import com.feed_the_beast.ftbquests.quest.task.QuestTaskType;
 import com.feed_the_beast.mods.money.integration.MoneyReward;
 import com.feed_the_beast.mods.money.integration.MoneyTask;
+import com.feed_the_beast.mods.money.net.MessageSyncShop;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -76,6 +77,7 @@ public class FTBMoneyEventHandler
 	{
 		if (event.player instanceof EntityPlayerMP)
 		{
+			new MessageSyncShop(Shop.SERVER).sendTo((EntityPlayerMP) event.player);
 			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
 		}
 	}

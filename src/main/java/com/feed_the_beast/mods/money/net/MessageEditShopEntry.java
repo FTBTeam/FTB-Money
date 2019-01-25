@@ -70,6 +70,7 @@ public class MessageEditShopEntry extends MessageToServer
 			}
 
 			t.shop.markDirty();
+			new MessageSyncShop(t.shop).sendToAll();
 		}
 	}
 }

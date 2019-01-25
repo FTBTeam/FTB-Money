@@ -36,13 +36,14 @@ import java.util.List;
 public class ButtonShopEntry extends Button
 {
 	public final ShopEntry entry;
-	public final boolean locked;
+	public final boolean unlocked;
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
 		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
-		locked = ((GuiShop) panel.getGui()).locked.contains(entry);
+		QuestObject lock = ClientQuestFile.INSTANCE.get(entry.lock);
+		unlocked = entry.lock == 0 || lock != null && lock.isComplete(ClientQuestFile.INSTANCE.self);
 		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
 		setHeight(24);
 	}
@@ -55,7 +56,7 @@ public class ButtonShopEntry extends Button
 
 		if (button.isLeft())
 		{
-			if (!locked || entry.tab.shop.file.canEdit())
+			if (unlocked || entry.tab.shop.file.canEdit())
 			{
 				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
 					gui.openGui();
@@ -118,7 +119,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public WidgetType getWidgetType()
 	{
-		if (locked && !entry.tab.shop.file.canEdit())
+		if (!unlocked && !entry.tab.shop.file.canEdit())
 		{
 			return WidgetType.DISABLED;
 		}
@@ -129,7 +130,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		if (locked)
+		if (!unlocked)
 		{
 			list.add("Locked!");
 			QuestObject object = ClientQuestFile.INSTANCE.get(entry.lock);
@@ -140,7 +141,7 @@ public class ButtonShopEntry extends Button
 			}
 		}
 
-		if (!locked || entry.tab.shop.file.canEdit())
+		if (unlocked || entry.tab.shop.file.canEdit())
 		{
 			GuiHelper.addStackTooltip(entry.stack, list);
 		}
@@ -151,7 +152,7 @@ public class ButtonShopEntry extends Button
 	{
 		drawBackground(theme, x, y, w, h);
 
-		if (locked && !entry.tab.shop.file.canEdit())
+		if (!unlocked && !entry.tab.shop.file.canEdit())
 		{
 			GuiIcons.LOCK.draw(x + 4, y + 4, 16, 16);
 			theme.drawString("???", x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
@@ -177,6 +178,6 @@ public class ButtonShopEntry extends Button
 	@Nullable
 	public Object getJEIFocus()
 	{
-		return locked ? null : entry.stack;
+		return unlocked ? entry.stack : null;
 	}
 }

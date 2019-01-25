@@ -1,6 +1,7 @@
 package com.feed_the_beast.mods.money.shop;
 
 import com.feed_the_beast.ftbquests.quest.QuestFile;
+import com.feed_the_beast.mods.money.net.MessageSyncShop;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
@@ -19,6 +20,7 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 	public static final Pattern PATTERN = Pattern.compile("[^a-zA-Z0-9]");
 
 	public static Shop SERVER;
+	public static Shop CLIENT;
 
 	public final QuestFile file;
 	public final List<ShopTab> tabs = new ArrayList<>();
@@ -62,6 +64,11 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 	public void markDirty()
 	{
 		shouldSave = true;
+
+		if (!file.isClient())
+		{
+			new MessageSyncShop(this).sendToAll();
+		}
 	}
 
 	@Nullable

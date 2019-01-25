@@ -4,6 +4,7 @@ import com.feed_the_beast.ftblib.lib.gui.Panel;
 import com.feed_the_beast.ftblib.lib.gui.Theme;
 import com.feed_the_beast.ftblib.lib.gui.Widget;
 import com.feed_the_beast.ftblib.lib.gui.WidgetLayout;
+import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 
@@ -34,7 +35,7 @@ public class PanelShopEntryButtons extends Panel
 	{
 		if (!guiShop.searchBox.getText().isEmpty())
 		{
-			for (ShopTab tab : guiShop.shop.tabs)
+			for (ShopTab tab : Shop.CLIENT.tabs)
 			{
 				for (ShopEntry entry : tab.entries)
 				{
@@ -49,7 +50,7 @@ public class PanelShopEntryButtons extends Panel
 				add(new ButtonShopEntry(this, entry));
 			}
 
-			if (guiShop.shop.file.canEdit())
+			if (Shop.CLIENT.file.canEdit())
 			{
 				add(new ButtonAddEntry(this));
 			}

@@ -12,6 +12,7 @@ import com.feed_the_beast.ftblib.lib.icon.ItemIcon;
 import com.feed_the_beast.ftblib.lib.util.misc.MouseButton;
 import com.feed_the_beast.mods.money.net.MessageEditShopTab;
 import com.feed_the_beast.mods.money.net.MessageMoveShopTab;
+import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -88,7 +89,7 @@ public class ButtonTab extends Button
 
 				if (gui.selectedTab == tab)
 				{
-					gui.selectedTab = gui.shop.tabs.isEmpty() ? null : gui.shop.tabs.get(0);
+					gui.selectedTab = Shop.CLIENT.tabs.isEmpty() ? null : Shop.CLIENT.tabs.get(0);
 				}
 
 				gui.refreshWidgets();

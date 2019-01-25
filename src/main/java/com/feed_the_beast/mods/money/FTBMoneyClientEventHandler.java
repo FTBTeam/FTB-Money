@@ -1,7 +1,8 @@
 package com.feed_the_beast.mods.money;
 
 import com.feed_the_beast.ftblib.events.client.CustomClickEvent;
-import com.feed_the_beast.mods.money.net.MessageOpenShop;
+import com.feed_the_beast.mods.money.gui.GuiShop;
+import com.feed_the_beast.mods.money.shop.Shop;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,10 @@ public class FTBMoneyClientEventHandler
 		{
 			if (event.getID().getPath().equals("open_gui"))
 			{
-				new MessageOpenShop().sendToServer();
+				if (Shop.CLIENT != null)
+				{
+					new GuiShop().openGui();
+				}
 			}
 
 			event.setCanceled(true);
