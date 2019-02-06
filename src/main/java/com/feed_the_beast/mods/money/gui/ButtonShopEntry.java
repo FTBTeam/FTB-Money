@@ -20,7 +20,6 @@ import com.feed_the_beast.mods.money.FTBMoney;
 import com.feed_the_beast.mods.money.FTBMoneyClientConfig;
 import com.feed_the_beast.mods.money.net.MessageBuy;
 import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
-import com.feed_the_beast.mods.money.net.MessageMoveShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -81,32 +80,6 @@ public class ButtonShopEntry extends Button
 				ConfigGroup g = group.getGroup("shop").getGroup("entry");
 				entry.getConfig(g);
 				new GuiEditConfig(group, (g1, sender) -> new MessageEditShopEntry(entry, false).sendToServer()).openGui();
-				gui.refreshWidgets();
-			}));
-
-			contextMenu.add(new ContextMenuItem(I18n.format("gui.move"), GuiIcons.UP, () -> {
-				new MessageMoveShopEntry(entry, true).sendToServer();
-				int id = entry.getIndex();
-
-				if (id > 0)
-				{
-					entry.tab.entries.remove(id);
-					entry.tab.entries.add(id - 1, entry);
-				}
-
-				gui.refreshWidgets();
-			}));
-
-			contextMenu.add(new ContextMenuItem(I18n.format("gui.move"), GuiIcons.DOWN, () -> {
-				new MessageMoveShopEntry(entry, false).sendToServer();
-				int id = entry.getIndex();
-
-				if (id < entry.tab.entries.size() - 1)
-				{
-					entry.tab.entries.remove(id);
-					entry.tab.entries.add(id + 1, entry);
-				}
-
 				gui.refreshWidgets();
 			}));
 

@@ -20,6 +20,5 @@ public class FTBMoneyNetHandler
 		NET.register(new MessageMoveShopTab());
 		NET.register(new MessageAddShopEntry());
 		NET.register(new MessageEditShopEntry());
-		NET.register(new MessageMoveShopEntry());
 	}
 }
