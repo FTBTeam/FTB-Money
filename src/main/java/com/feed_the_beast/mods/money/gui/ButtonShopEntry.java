@@ -17,6 +17,7 @@ import com.feed_the_beast.ftblib.lib.util.misc.MouseButton;
 import com.feed_the_beast.ftbquests.client.ClientQuestFile;
 import com.feed_the_beast.ftbquests.quest.QuestObject;
 import com.feed_the_beast.mods.money.FTBMoney;
+import com.feed_the_beast.mods.money.FTBMoneyClientConfig;
 import com.feed_the_beast.mods.money.net.MessageBuy;
 import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
 import com.feed_the_beast.mods.money.net.MessageMoveShopEntry;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,6 +37,8 @@ import java.util.List;
  */
 public class ButtonShopEntry extends Button
 {
+	public static final Comparator<ButtonShopEntry> COMPARATOR = (o1, o2) -> FTBMoneyClientConfig.general.sort.comparator.compare(o1.entry, o2.entry);
+
 	public final ShopEntry entry;
 	public final boolean unlocked;
 

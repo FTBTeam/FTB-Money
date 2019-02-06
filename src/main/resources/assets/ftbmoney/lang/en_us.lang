@@ -7,6 +7,11 @@ ftbmoney.sell=Sell
 ftbmoney.shop.tab.title=Title
 ftbmoney.shop.tab.icon=Icon
 ftbmoney.shop.tab.lock=Lock
+ftbmoney.shop.tab.sort=Sort
+ftbmoney.shop.tab.sort.price_h_l=Price High to Low
+ftbmoney.shop.tab.sort.price_l_h=Price Low to High
+ftbmoney.shop.tab.sort.name_a_z=A to Z
+ftbmoney.shop.tab.sort.name_z_a=Z to A
 
 ftbmoney.shop.entry.item=Item
 ftbmoney.shop.entry.buy=Buy Price

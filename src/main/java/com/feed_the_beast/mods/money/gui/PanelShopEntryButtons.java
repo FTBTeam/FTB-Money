@@ -8,6 +8,9 @@ import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author LatvianModder
  */
@@ -33,13 +36,17 @@ public class PanelShopEntryButtons extends Panel
 	@Override
 	public void addWidgets()
 	{
+		List<ButtonShopEntry> buttons = new ArrayList<>();
+		List<ButtonShopEntry> locked = new ArrayList<>();
+
 		if (!guiShop.searchBox.getText().isEmpty())
 		{
 			for (ShopTab tab : Shop.CLIENT.tabs)
 			{
 				for (ShopEntry entry : tab.entries)
 				{
-					add(new ButtonShopEntry(this, entry));
+					ButtonShopEntry b = new ButtonShopEntry(this, entry);
+					(b.unlocked ? buttons : locked).add(b);
 				}
 			}
 		}
@@ -47,13 +54,18 @@ public class PanelShopEntryButtons extends Panel
 		{
 			for (ShopEntry entry : guiShop.selectedTab.entries)
 			{
-				add(new ButtonShopEntry(this, entry));
+				ButtonShopEntry b = new ButtonShopEntry(this, entry);
+				(b.unlocked ? buttons : locked).add(b);
 			}
+		}
 
-			if (Shop.CLIENT.file.canEdit())
-			{
-				add(new ButtonAddEntry(this));
-			}
+		buttons.sort(ButtonShopEntry.COMPARATOR);
+		addAll(buttons);
+		addAll(locked);
+
+		if (guiShop.selectedTab != null && Shop.CLIENT.file.canEdit())
+		{
+			add(new ButtonAddEntry(this));
 		}
 	}
 
