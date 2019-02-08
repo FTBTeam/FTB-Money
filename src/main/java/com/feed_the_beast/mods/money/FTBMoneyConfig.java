@@ -10,10 +10,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author LatvianModder
  */
 @Mod.EventBusSubscriber(modid = FTBMoney.MOD_ID)
-@Config(modid = FTBMoneyConfig.ID, category = "", name = FTBMoney.MOD_ID)
+@Config(modid = FTBMoney.MOD_ID, category = "")
 public class FTBMoneyConfig
 {
-	public static final String ID = FTBMoney.MOD_ID + "_common";
 	public static final General general = new General();
 
 	public static class General
@@ -26,9 +25,9 @@ public class FTBMoneyConfig
 	@SubscribeEvent
 	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if (event.getModID().equals(ID))
+		if (event.getModID().equals(FTBMoney.MOD_ID))
 		{
-			ConfigManager.sync(ID, Config.Type.INSTANCE);
+			ConfigManager.sync(FTBMoney.MOD_ID, Config.Type.INSTANCE);
 		}
 	}
 }
