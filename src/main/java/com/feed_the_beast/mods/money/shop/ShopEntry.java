@@ -119,7 +119,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		group.add("item", new ConfigItemStack.SimpleStack(() -> stack, v -> stack = v), new ConfigItemStack(ItemStack.EMPTY));
 		group.addLong("buy", () -> buy, v -> buy = v, 1L, 0L, Long.MAX_VALUE);
 		//group.addLong("sell", () -> sell, v -> sell = v, 0L, 0L, Long.MAX_VALUE);
-		group.add("lock", new ConfigQuestObject(tab.shop.file, tab.shop.file.get(lock), QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.FILE, QuestObjectType.TASK, QuestObjectType.VARIABLE)
+		group.add("lock", new ConfigQuestObject(tab.shop.file, tab.shop.file.get(lock), QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.QUEST, QuestObjectType.TASK, QuestObjectType.VARIABLE)
 		{
 			@Override
 			public void setObject(@Nullable QuestObjectBase object)
@@ -140,7 +140,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 			{
 				return lock == 0 ? null : tab.shop.file.get(lock);
 			}
-		}, new ConfigQuestObject(tab.shop.file, null, QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.FILE, QuestObjectType.TASK, QuestObjectType.VARIABLE));
+		}, new ConfigQuestObject(tab.shop.file, null, QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.QUEST, QuestObjectType.TASK, QuestObjectType.VARIABLE));
 	}
 
 	public int getIndex()
