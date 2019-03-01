@@ -54,6 +54,7 @@ public class GuiShop extends GuiBase
 			public void onTextChanged()
 			{
 				panelButtons.refreshWidgets();
+				sort.setPosAndSize(GuiShop.this.width - 1, 6, 20, 20);
 			}
 		};
 

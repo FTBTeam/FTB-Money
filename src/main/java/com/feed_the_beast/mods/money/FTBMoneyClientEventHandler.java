@@ -5,6 +5,7 @@ import com.feed_the_beast.mods.money.gui.GuiShop;
 import com.feed_the_beast.mods.money.shop.Shop;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
@@ -27,6 +28,15 @@ public class FTBMoneyClientEventHandler
 			}
 
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onKeyEvent(InputEvent.KeyInputEvent event)
+	{
+		if (FTBMoneyClient.KEY_SHOP.isPressed())
+		{
+			new GuiShop().openGui();
 		}
 	}
 }

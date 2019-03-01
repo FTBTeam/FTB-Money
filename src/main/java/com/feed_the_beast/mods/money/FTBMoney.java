@@ -13,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -32,10 +33,14 @@ public class FTBMoney
 	public static final String VERSION = "0.0.0.ftbmoney";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
+	@SidedProxy(serverSide = "com.feed_the_beast.mods.money.FTBMoneyCommon", clientSide = "com.feed_the_beast.mods.money.FTBMoneyClient")
+	public static FTBMoneyCommon PROXY;
+
 	@Mod.EventHandler
 	public void onPreInit(FMLPreInitializationEvent event)
 	{
 		FTBMoneyNetHandler.init();
+		PROXY.preInit();
 	}
 
 	@Mod.EventHandler
