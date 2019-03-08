@@ -23,6 +23,7 @@ ftbquests.task.ftbmoney.money=Money
 ftbquests.reward.ftbmoney.money=Money
 
 commands.ftbmoney.money.usage=/money
+commands.ftbmoney.pay.usage=/pay <player> <amount>
 commands.ftbmoney.setmoney.usage=/setmoney <player> <amount>
 commands.ftbmoney.setmoney.add=Added %s to %s's balance
 commands.ftbmoney.setmoney.set=Set %s's balance to %s

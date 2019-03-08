@@ -4,6 +4,7 @@ import com.feed_the_beast.ftblib.FTBLib;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.mods.money.command.CommandImportItemsFromChest;
 import com.feed_the_beast.mods.money.command.CommandMoney;
+import com.feed_the_beast.mods.money.command.CommandPay;
 import com.feed_the_beast.mods.money.command.CommandSetMoney;
 import com.feed_the_beast.mods.money.net.FTBMoneyNetHandler;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
@@ -47,6 +48,7 @@ public class FTBMoney
 	public void onServerStarting(FMLServerStartingEvent event)
 	{
 		event.registerServerCommand(new CommandMoney());
+		event.registerServerCommand(new CommandPay());
 		event.registerServerCommand(new CommandSetMoney());
 		event.registerServerCommand(new CommandImportItemsFromChest());
 	}
