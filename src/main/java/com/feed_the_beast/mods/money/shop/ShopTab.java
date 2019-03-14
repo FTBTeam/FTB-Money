@@ -20,7 +20,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	public final Shop shop;
 	public String title = "";
 	public ItemStack icon = ItemStack.EMPTY;
-	public String lock = "";
+	public int lock = 0;
 	public final List<ShopEntry> entries = new ArrayList<>();
 
 	public ShopTab(Shop s)
@@ -34,9 +34,9 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 		nbt.setString("title", title);
 		nbt.setTag("icon", ItemStackSerializer.write(icon, false));
 
-		if (!lock.isEmpty())
+		if (lock != 0)
 		{
-			nbt.setString("lock", lock);
+			nbt.setInteger("lock", lock);
 		}
 
 		return nbt;
@@ -46,7 +46,7 @@ public class ShopTab implements INBTSerializable<NBTTagCompound>
 	{
 		title = nbt.getString("title");
 		icon = ItemStackSerializer.read(nbt.getTag("icon"));
-		lock = nbt.getString("lock");
+		lock = nbt.getInteger("lock");
 	}
 
 	@Override

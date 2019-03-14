@@ -83,7 +83,7 @@ public class CommandPay extends CommandBase
 		ITextComponent senderName = sender.getDisplayName();
 		senderName.getStyle().setColor(TextFormatting.BLUE);
 
-		ITextComponent playerName = sender.getDisplayName();
+		ITextComponent playerName = player.getDisplayName();
 		playerName.getStyle().setColor(TextFormatting.BLUE);
 
 		FTBMoney.setMoney(senderPlayer, money - pay);
