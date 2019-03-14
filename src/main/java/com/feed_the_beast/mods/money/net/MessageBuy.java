@@ -61,6 +61,12 @@ public class MessageBuy extends MessageToServer
 	{
 		ShopTab t = Shop.SERVER.tabs.get(tab);
 		ShopEntry entry = t.entries.get(id);
+
+		if (entry.disabledServer && player.server.isDedicatedServer())
+		{
+			return;
+		}
+
 		long money = FTBMoney.getMoney(player);
 
 		if (money >= entry.buy * count && entry.isUnlocked(ServerQuestFile.INSTANCE.getData(FTBLibAPI.getTeam(player.getUniqueID()))))

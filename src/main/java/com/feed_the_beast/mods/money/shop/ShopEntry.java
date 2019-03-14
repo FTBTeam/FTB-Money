@@ -30,6 +30,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 	public BlockDimPos stock = null;
 	public UUID createdBy = null;
 	public int lock = 0;
+	public boolean disabledServer = false;
 
 	public ShopEntry(ShopTab t)
 	{
@@ -67,6 +68,11 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 			nbt.setInteger("lock", lock);
 		}
 
+		if (disabledServer)
+		{
+			nbt.setBoolean("disabled_server", true);
+		}
+
 		return nbt;
 	}
 
@@ -97,6 +103,8 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 				}
 			}
 		}
+
+		disabledServer = nbt.getBoolean("disabled_server");
 	}
 
 	public boolean isUnlocked(@Nullable ITeamData team)
@@ -119,7 +127,9 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		group.add("item", new ConfigItemStack.SimpleStack(() -> stack, v -> stack = v), new ConfigItemStack(ItemStack.EMPTY));
 		group.addLong("buy", () -> buy, v -> buy = v, 1L, 0L, Long.MAX_VALUE);
 		//group.addLong("sell", () -> sell, v -> sell = v, 0L, 0L, Long.MAX_VALUE);
-		group.add("lock", new ConfigQuestObject(tab.shop.file, tab.shop.file.get(lock), QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.QUEST, QuestObjectType.TASK, QuestObjectType.VARIABLE)
+
+		QuestObject object = tab.shop.file.get(lock);
+		group.add("lock", new ConfigQuestObject(tab.shop.file, object == null ? tab.shop.file.nullObject : object, QuestObjectType.ALL_PROGRESSING_OR_NULL)
 		{
 			@Override
 			public void setObject(@Nullable QuestObjectBase object)
@@ -135,12 +145,13 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 			}
 
 			@Override
-			@Nullable
 			public QuestObjectBase getObject()
 			{
-				return lock == 0 ? null : tab.shop.file.get(lock);
+				QuestObject object = tab.shop.file.get(lock);
+				return object == null ? tab.shop.file.nullObject : object;
 			}
-		}, new ConfigQuestObject(tab.shop.file, null, QuestObjectType.NULL, QuestObjectType.FILE, QuestObjectType.CHAPTER, QuestObjectType.QUEST, QuestObjectType.TASK, QuestObjectType.VARIABLE));
+		}, new ConfigQuestObject(tab.shop.file, tab.shop.file.nullObject, QuestObjectType.ALL_PROGRESSING_OR_NULL));
+		group.addBool("disabled_server", () -> disabledServer, v -> disabledServer = v, false);
 	}
 
 	public int getIndex()
