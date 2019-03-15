@@ -127,9 +127,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		group.add("item", new ConfigItemStack.SimpleStack(() -> stack, v -> stack = v), new ConfigItemStack(ItemStack.EMPTY));
 		group.addLong("buy", () -> buy, v -> buy = v, 1L, 0L, Long.MAX_VALUE);
 		//group.addLong("sell", () -> sell, v -> sell = v, 0L, 0L, Long.MAX_VALUE);
-
-		QuestObject object = tab.shop.file.get(lock);
-		group.add("lock", new ConfigQuestObject(tab.shop.file, object == null ? tab.shop.file.nullObject : object, QuestObjectType.ALL_PROGRESSING_OR_NULL)
+		group.add("lock", new ConfigQuestObject(tab.shop.file, tab.shop.file.get(lock), QuestObjectType.ALL_PROGRESSING_OR_NULL)
 		{
 			@Override
 			public void setObject(@Nullable QuestObjectBase object)
@@ -145,12 +143,12 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 			}
 
 			@Override
+			@Nullable
 			public QuestObjectBase getObject()
 			{
-				QuestObject object = tab.shop.file.get(lock);
-				return object == null ? tab.shop.file.nullObject : object;
+				return lock == 0 ? null : tab.shop.file.get(lock);
 			}
-		}, new ConfigQuestObject(tab.shop.file, tab.shop.file.nullObject, QuestObjectType.ALL_PROGRESSING_OR_NULL));
+		}, new ConfigQuestObject(tab.shop.file, null, QuestObjectType.ALL_PROGRESSING_OR_NULL));
 		group.addBool("disabled_server", () -> disabledServer, v -> disabledServer = v, false);
 	}
 
