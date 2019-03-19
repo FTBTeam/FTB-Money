@@ -3,6 +3,7 @@ package com.feed_the_beast.mods.money.integration.jei;
 import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public enum ShopRegistry
 			{
 				for (ShopEntry entry : tab.entries)
 				{
-					if (entry.lock == 0)
+					if (entry.lock == 0 && (!entry.disabledServer || Minecraft.getMinecraft().isSingleplayer()))
 					{
 						ShopWrapper wrapper = new ShopWrapper(entry);
 						list.add(wrapper);
