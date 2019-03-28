@@ -7,7 +7,6 @@ import com.feed_the_beast.ftblib.lib.gui.WidgetLayout;
 import com.feed_the_beast.mods.money.shop.Shop;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopTab;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,8 @@ public class PanelShopEntryButtons extends Panel
 			{
 				for (ShopEntry entry : tab.entries)
 				{
-					if (!entry.disabledServer || Shop.CLIENT.file.canEdit() || Minecraft.getMinecraft().isSingleplayer())
-					{
-						ButtonShopEntry b = new ButtonShopEntry(this, entry);
-						(b.unlocked ? buttons : locked).add(b);
-					}
+					ButtonShopEntry b = new ButtonShopEntry(this, entry);
+					(b.locked == 0 ? buttons : locked).add(b);
 				}
 			}
 		}
@@ -58,11 +54,8 @@ public class PanelShopEntryButtons extends Panel
 		{
 			for (ShopEntry entry : guiShop.selectedTab.entries)
 			{
-				if (!entry.disabledServer || Shop.CLIENT.file.canEdit() || Minecraft.getMinecraft().isSingleplayer())
-				{
-					ButtonShopEntry b = new ButtonShopEntry(this, entry);
-					(b.unlocked ? buttons : locked).add(b);
-				}
+				ButtonShopEntry b = new ButtonShopEntry(this, entry);
+				(b.locked == 0 ? buttons : locked).add(b);
 			}
 		}
 

@@ -7,6 +7,10 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author LatvianModder
@@ -37,5 +41,16 @@ public class ShopWrapper implements IRecipeWrapper
 
 		mc.fontRenderer.drawString(bs, recipeWidth - mc.fontRenderer.getStringWidth(bs), 1, 0xFF222222);
 		mc.fontRenderer.drawString(ss, recipeWidth - mc.fontRenderer.getStringWidth(ss), 10, 0xFF222222);
+	}
+
+	@Override
+	public List<String> getTooltipStrings(int mouseX, int mouseY)
+	{
+		if (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer())
+		{
+			return Collections.singletonList(TextFormatting.RED + I18n.format("ftbmoney.shop.entry.disabled_server"));
+		}
+
+		return Collections.emptyList();
 	}
 }

@@ -39,14 +39,14 @@ public class ButtonShopEntry extends Button
 	public static final Comparator<ButtonShopEntry> COMPARATOR = (o1, o2) -> FTBMoneyClientConfig.general.sort.comparator.compare(o1.entry, o2.entry);
 
 	public final ShopEntry entry;
-	public final boolean unlocked;
+	public final int locked;
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
 		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
 		QuestObject lock = ClientQuestFile.INSTANCE.get(entry.lock);
-		unlocked = entry.lock == 0 || lock != null && lock.isComplete(ClientQuestFile.INSTANCE.self);
+		locked = (entry.lock == 0 || lock != null && lock.isComplete(ClientQuestFile.INSTANCE.self)) ? (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer()) ? 1 : 0 : 2;
 		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
 		setHeight(24);
 	}
@@ -59,7 +59,7 @@ public class ButtonShopEntry extends Button
 
 		if (button.isLeft())
 		{
-			if (unlocked || entry.tab.shop.file.canEdit())
+			if (locked == 0 || entry.tab.shop.file.canEdit())
 			{
 				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
 					gui.openGui();
@@ -96,7 +96,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public WidgetType getWidgetType()
 	{
-		if (!unlocked && !entry.tab.shop.file.canEdit())
+		if (locked > 0 && !entry.tab.shop.file.canEdit())
 		{
 			return WidgetType.DISABLED;
 		}
@@ -107,7 +107,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public void addMouseOverText(List<String> list)
 	{
-		if (!unlocked)
+		if (locked == 2)
 		{
 			list.add("Locked!");
 			QuestObject object = ClientQuestFile.INSTANCE.get(entry.lock);
@@ -118,8 +118,13 @@ public class ButtonShopEntry extends Button
 			}
 		}
 
-		if (unlocked || entry.tab.shop.file.canEdit())
+		if (locked < 2 || entry.tab.shop.file.canEdit())
 		{
+			if (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer())
+			{
+				list.add(TextFormatting.RED + I18n.format("ftbmoney.shop.entry.disabled_server"));
+			}
+
 			GuiHelper.addStackTooltip(entry.stack, list);
 		}
 	}
@@ -129,7 +134,7 @@ public class ButtonShopEntry extends Button
 	{
 		drawBackground(theme, x, y, w, h);
 
-		if (!unlocked && !entry.tab.shop.file.canEdit())
+		if (locked == 2 && !entry.tab.shop.file.canEdit())
 		{
 			GuiIcons.LOCK.draw(x + 4, y + 4, 16, 16);
 			theme.drawString("???", x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
@@ -155,6 +160,6 @@ public class ButtonShopEntry extends Button
 	@Nullable
 	public Object getJEIFocus()
 	{
-		return unlocked ? entry.stack : null;
+		return locked < 2 ? entry.stack : null;
 	}
 }
