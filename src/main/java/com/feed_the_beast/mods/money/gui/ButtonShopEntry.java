@@ -158,7 +158,7 @@ public class ButtonShopEntry extends Button
 
 	@Override
 	@Nullable
-	public Object getJEIFocus()
+	public Object getIngredientUnderMouse()
 	{
 		return locked < 2 ? entry.stack : null;
 	}
