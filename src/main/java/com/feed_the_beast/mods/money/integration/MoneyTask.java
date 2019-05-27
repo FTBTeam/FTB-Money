@@ -113,6 +113,12 @@ public class MoneyTask extends QuestTask implements ISingleLongValueTask
 	}
 
 	@Override
+	public boolean consumesResources()
+	{
+		return true;
+	}
+
+	@Override
 	public QuestTaskData createData(ITeamData data)
 	{
 		return new Data(this, data);
