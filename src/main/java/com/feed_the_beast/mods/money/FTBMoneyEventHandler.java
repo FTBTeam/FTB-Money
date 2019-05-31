@@ -5,7 +5,7 @@ import com.feed_the_beast.ftblib.lib.gui.IOpenableGui;
 import com.feed_the_beast.ftblib.lib.gui.misc.GuiEditConfigValue;
 import com.feed_the_beast.ftblib.lib.icon.Icon;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
-import com.feed_the_beast.ftbquests.quest.QuestObjectBase;
+import com.feed_the_beast.ftbquests.quest.Quest;
 import com.feed_the_beast.ftbquests.quest.ServerQuestFile;
 import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
 import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
@@ -115,7 +115,7 @@ public class FTBMoneyEventHandler
 		{
 			@Override
 			@SideOnly(Side.CLIENT)
-			public void openCreationGui(IOpenableGui gui, QuestObjectBase parent, Consumer<QuestReward> callback)
+			public void openCreationGui(IOpenableGui gui, Quest quest, Consumer<QuestReward> callback)
 			{
 				new GuiEditConfigValue("money", new ConfigString(""), (value, set) -> {
 					gui.openGui();
@@ -124,7 +124,7 @@ public class FTBMoneyEventHandler
 						try
 						{
 							String[] s = value.getString().split("-", 2);
-							MoneyReward reward = new MoneyReward(parent);
+							MoneyReward reward = new MoneyReward(quest);
 							reward.value = Long.parseLong(s[0].trim());
 
 							if (s.length == 2)
