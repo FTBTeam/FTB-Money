@@ -99,4 +99,15 @@ public class MoneyReward extends QuestReward
 
 		return FTBMoney.moneyComponent(value);
 	}
+
+	@Override
+	public String getButtonText()
+	{
+		if (randomBonus > 0)
+		{
+			return randomBonus + "-" + Long.toUnsignedString(value + randomBonus);
+		}
+
+		return Long.toUnsignedString(value);
+	}
 }
