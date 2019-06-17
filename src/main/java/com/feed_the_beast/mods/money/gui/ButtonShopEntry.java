@@ -114,7 +114,7 @@ public class ButtonShopEntry extends Button
 
 			if (object != null)
 			{
-				list.add("Requires: " + object.getObjectType().getColor() + object.getDisplayName().getFormattedText());
+				list.add("Requires: " + object.getObjectType().getColor() + object.getTitle());
 			}
 		}
 

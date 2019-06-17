@@ -9,10 +9,11 @@ import com.feed_the_beast.ftbquests.quest.Quest;
 import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
 import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
 import com.feed_the_beast.mods.money.FTBMoney;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * @author LatvianModder
@@ -70,9 +71,9 @@ public class MoneyReward extends QuestReward
 	}
 
 	@Override
-	public void getConfig(ConfigGroup config)
+	public void getConfig(EntityPlayer player, ConfigGroup config)
 	{
-		super.getConfig(config);
+		super.getConfig(player, config);
 		config.addLong("value", () -> value, v -> value = v, 1L, 1L, Long.MAX_VALUE).setDisplayName(new TextComponentTranslation("ftbquests.reward.ftbmoney.money"));
 		config.addInt("random_bonus", () -> randomBonus, v -> randomBonus = v, 0, 0, Integer.MAX_VALUE).setDisplayName(new TextComponentTranslation("ftbquests.reward.random_bonus"));
 	}
@@ -90,14 +91,14 @@ public class MoneyReward extends QuestReward
 	}
 
 	@Override
-	public ITextComponent getAltDisplayName()
+	public String getAltTitle()
 	{
 		if (randomBonus > 0)
 		{
-			return FTBMoney.moneyComponent(value).appendText(" - ").appendSibling(FTBMoney.moneyComponent(value + randomBonus));
+			return TextFormatting.GOLD + FTBMoney.moneyString(value) + " - " + FTBMoney.moneyString(value + randomBonus);
 		}
 
-		return FTBMoney.moneyComponent(value);
+		return TextFormatting.GOLD + FTBMoney.moneyString(value);
 	}
 
 	@Override

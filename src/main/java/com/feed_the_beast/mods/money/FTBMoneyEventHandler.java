@@ -83,20 +83,14 @@ public class FTBMoneyEventHandler
 	}
 
 	@SubscribeEvent
-	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event)
 	{
-		if (event.player instanceof EntityPlayerMP)
-		{
-			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
-		}
-	}
+		long money = FTBMoney.getMoney(event.getOriginal());
+		FTBMoney.setMoney(event.getEntityPlayer(), money);
 
-	@SubscribeEvent
-	public static void onPlayerDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event)
-	{
-		if (event.player instanceof EntityPlayerMP)
+		if (event.getEntityPlayer() instanceof EntityPlayerMP)
 		{
-			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
+			new MessageUpdateMoney(money).sendTo((EntityPlayerMP) event.getEntityPlayer());
 		}
 	}
 
