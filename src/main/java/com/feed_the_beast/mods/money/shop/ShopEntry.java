@@ -4,7 +4,7 @@ import com.feed_the_beast.ftblib.lib.config.ConfigGroup;
 import com.feed_the_beast.ftblib.lib.config.ConfigItemStack;
 import com.feed_the_beast.ftblib.lib.math.BlockDimPos;
 import com.feed_the_beast.ftblib.lib.util.StringUtils;
-import com.feed_the_beast.ftbquests.quest.ITeamData;
+import com.feed_the_beast.ftbquests.quest.QuestData;
 import com.feed_the_beast.ftbquests.quest.QuestObject;
 import com.feed_the_beast.ftbquests.quest.QuestObjectBase;
 import com.feed_the_beast.ftbquests.quest.QuestObjectType;
@@ -107,7 +107,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		disabledServer = nbt.getBoolean("disabled_server");
 	}
 
-	public boolean isUnlocked(@Nullable ITeamData team)
+	public boolean isUnlocked(@Nullable QuestData team)
 	{
 		if (lock == 0)
 		{
