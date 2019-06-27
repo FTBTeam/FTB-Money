@@ -6,7 +6,6 @@ import com.feed_the_beast.ftblib.lib.math.BlockDimPos;
 import com.feed_the_beast.ftblib.lib.util.StringUtils;
 import com.feed_the_beast.ftbquests.quest.QuestData;
 import com.feed_the_beast.ftbquests.quest.QuestObject;
-import com.feed_the_beast.ftbquests.quest.QuestObjectBase;
 import com.feed_the_beast.ftbquests.quest.QuestObjectType;
 import com.feed_the_beast.ftbquests.util.ConfigQuestObject;
 import com.latmod.mods.itemfilters.item.ItemStackSerializer;
@@ -127,28 +126,20 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		group.add("item", new ConfigItemStack.SimpleStack(() -> stack, v -> stack = v), new ConfigItemStack(ItemStack.EMPTY));
 		group.addLong("buy", () -> buy, v -> buy = v, 1L, 0L, Long.MAX_VALUE);
 		//group.addLong("sell", () -> sell, v -> sell = v, 0L, 0L, Long.MAX_VALUE);
-		group.add("lock", new ConfigQuestObject(tab.shop.file, tab.shop.file.get(lock), QuestObjectType.ALL_PROGRESSING_OR_NULL)
+		group.add("lock", new ConfigQuestObject(tab.shop.file, lock, QuestObjectType.ALL_PROGRESSING_OR_NULL)
 		{
 			@Override
-			public void setObject(@Nullable QuestObjectBase object)
+			public void setObject(int v)
 			{
-				if (object instanceof QuestObject)
-				{
-					lock = object.id;
-				}
-				else
-				{
-					lock = 0;
-				}
+				lock = v;
 			}
 
 			@Override
-			@Nullable
-			public QuestObjectBase getObject()
+			public int getObject()
 			{
-				return lock == 0 ? null : tab.shop.file.get(lock);
+				return lock;
 			}
-		}, new ConfigQuestObject(tab.shop.file, null, QuestObjectType.ALL_PROGRESSING_OR_NULL));
+		}, new ConfigQuestObject(tab.shop.file, 0, QuestObjectType.ALL_PROGRESSING_OR_NULL));
 		group.addBool("disabled_server", () -> disabledServer, v -> disabledServer = v, false);
 	}
 
