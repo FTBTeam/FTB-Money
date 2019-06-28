@@ -154,8 +154,7 @@ public class MoneyTask extends Task implements ISingleLongValueTask
 				if (!simulate)
 				{
 					FTBMoney.setMoney(player, money - add);
-					progress += add;
-					sync();
+					addProgress(add);
 				}
 
 				return true;
