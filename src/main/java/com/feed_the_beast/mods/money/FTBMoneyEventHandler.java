@@ -7,8 +7,8 @@ import com.feed_the_beast.ftblib.lib.icon.Icon;
 import com.feed_the_beast.ftblib.lib.util.NBTUtils;
 import com.feed_the_beast.ftbquests.quest.Quest;
 import com.feed_the_beast.ftbquests.quest.ServerQuestFile;
-import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
-import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
+import com.feed_the_beast.ftbquests.quest.reward.Reward;
+import com.feed_the_beast.ftbquests.quest.reward.RewardType;
 import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.money.integration.MoneyReward;
 import com.feed_the_beast.mods.money.integration.MoneyTask;
@@ -101,15 +101,15 @@ public class FTBMoneyEventHandler
 	}
 
 	@SubscribeEvent
-	public static void registerRewards(RegistryEvent.Register<QuestRewardType> event)
+	public static void registerRewards(RegistryEvent.Register<RewardType> event)
 	{
-		event.getRegistry().register(MoneyReward.TYPE = new QuestRewardType(MoneyReward::new).setRegistryName("money").setIcon(Icon.getIcon(FTBMoney.MOD_ID + ":textures/beastcoin.png")));
+		event.getRegistry().register(MoneyReward.TYPE = new RewardType(MoneyReward::new).setRegistryName("money").setIcon(Icon.getIcon(FTBMoney.MOD_ID + ":textures/beastcoin.png")));
 
-		MoneyReward.TYPE.setGuiProvider(new QuestRewardType.GuiProvider()
+		MoneyReward.TYPE.setGuiProvider(new RewardType.GuiProvider()
 		{
 			@Override
 			@SideOnly(Side.CLIENT)
-			public void openCreationGui(IOpenableGui gui, Quest quest, Consumer<QuestReward> callback)
+			public void openCreationGui(IOpenableGui gui, Quest quest, Consumer<Reward> callback)
 			{
 				new GuiEditConfigValue("money", new ConfigString(""), (value, set) -> {
 					gui.openGui();

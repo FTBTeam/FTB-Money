@@ -13,12 +13,13 @@ import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.money.FTBMoney;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -97,9 +98,10 @@ public class MoneyTask extends Task implements ISingleLongValueTask
 	}
 
 	@Override
-	public void getConfig(EntityPlayer player, ConfigGroup config)
+	@SideOnly(Side.CLIENT)
+	public void getConfig(ConfigGroup config)
 	{
-		super.getConfig(player, config);
+		super.getConfig(config);
 		config.addLong("value", () -> value, v -> value = v, 1L, 1L, Long.MAX_VALUE).setDisplayName(new TextComponentTranslation("ftbquests.task.ftbquests.ftb_money"));
 	}
 
@@ -122,6 +124,7 @@ public class MoneyTask extends Task implements ISingleLongValueTask
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addMouseOverText(List<String> list, @Nullable TaskData data)
 	{
 		list.add(TextFormatting.GRAY + I18n.format("ftbmoney.balance") + ": " + TextFormatting.GOLD + FTBMoney.moneyString(FTBMoney.getMoney(Minecraft.getMinecraft().player)));
