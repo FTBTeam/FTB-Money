@@ -106,19 +106,19 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		disabledServer = nbt.getBoolean("disabled_server");
 	}
 
-	public boolean isUnlocked(@Nullable QuestData team)
+	public boolean isUnlocked(@Nullable QuestData data)
 	{
 		if (lock == 0)
 		{
 			return true;
 		}
-		else if (team == null)
+		else if (data == null)
 		{
 			return false;
 		}
 
 		QuestObject object = tab.shop.file.get(lock);
-		return object != null && object.isComplete(team);
+		return object != null && object.isComplete(data);
 	}
 
 	public void getConfig(ConfigGroup group)

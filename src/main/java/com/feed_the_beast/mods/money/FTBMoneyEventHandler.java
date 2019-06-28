@@ -9,7 +9,7 @@ import com.feed_the_beast.ftbquests.quest.Quest;
 import com.feed_the_beast.ftbquests.quest.ServerQuestFile;
 import com.feed_the_beast.ftbquests.quest.reward.QuestReward;
 import com.feed_the_beast.ftbquests.quest.reward.QuestRewardType;
-import com.feed_the_beast.ftbquests.quest.task.QuestTaskType;
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.money.integration.MoneyReward;
 import com.feed_the_beast.mods.money.integration.MoneyTask;
 import com.feed_the_beast.mods.money.net.MessageSyncShop;
@@ -95,9 +95,9 @@ public class FTBMoneyEventHandler
 	}
 
 	@SubscribeEvent
-	public static void registerTasks(RegistryEvent.Register<QuestTaskType> event)
+	public static void registerTasks(RegistryEvent.Register<TaskType> event)
 	{
-		event.getRegistry().register(MoneyTask.TYPE = new QuestTaskType(MoneyTask::new).setRegistryName("money").setIcon(Icon.getIcon(FTBMoney.MOD_ID + ":textures/beastcoin.png")));
+		event.getRegistry().register(MoneyTask.TYPE = new TaskType(MoneyTask::new).setRegistryName("money").setIcon(Icon.getIcon(FTBMoney.MOD_ID + ":textures/beastcoin.png")));
 	}
 
 	@SubscribeEvent

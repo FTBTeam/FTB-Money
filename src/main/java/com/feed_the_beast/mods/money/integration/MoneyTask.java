@@ -7,10 +7,9 @@ import com.feed_the_beast.ftblib.lib.io.DataOut;
 import com.feed_the_beast.ftbquests.quest.Quest;
 import com.feed_the_beast.ftbquests.quest.QuestData;
 import com.feed_the_beast.ftbquests.quest.task.ISingleLongValueTask;
-import com.feed_the_beast.ftbquests.quest.task.QuestTask;
-import com.feed_the_beast.ftbquests.quest.task.QuestTaskData;
-import com.feed_the_beast.ftbquests.quest.task.QuestTaskType;
-import com.feed_the_beast.ftbquests.quest.task.SimpleQuestTaskData;
+import com.feed_the_beast.ftbquests.quest.task.Task;
+import com.feed_the_beast.ftbquests.quest.task.TaskData;
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.money.FTBMoney;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -28,9 +27,9 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-public class MoneyTask extends QuestTask implements ISingleLongValueTask
+public class MoneyTask extends Task implements ISingleLongValueTask
 {
-	public static QuestTaskType TYPE;
+	public static TaskType TYPE;
 
 	public long value = 1L;
 
@@ -40,7 +39,7 @@ public class MoneyTask extends QuestTask implements ISingleLongValueTask
 	}
 
 	@Override
-	public QuestTaskType getType()
+	public TaskType getType()
 	{
 		return TYPE;
 	}
@@ -117,18 +116,18 @@ public class MoneyTask extends QuestTask implements ISingleLongValueTask
 	}
 
 	@Override
-	public QuestTaskData createData(QuestData data)
+	public TaskData createData(QuestData data)
 	{
 		return new Data(this, data);
 	}
 
 	@Override
-	public void addMouseOverText(List<String> list, @Nullable QuestTaskData data)
+	public void addMouseOverText(List<String> list, @Nullable TaskData data)
 	{
 		list.add(TextFormatting.GRAY + I18n.format("ftbmoney.balance") + ": " + TextFormatting.GOLD + FTBMoney.moneyString(FTBMoney.getMoney(Minecraft.getMinecraft().player)));
 	}
 
-	public static class Data extends SimpleQuestTaskData<MoneyTask>
+	public static class Data extends TaskData<MoneyTask>
 	{
 		private Data(MoneyTask task, QuestData data)
 		{
