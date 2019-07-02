@@ -81,12 +81,12 @@ public class MoneyReward extends Reward
 	}
 
 	@Override
-	public void claim(EntityPlayerMP player)
+	public void claim(EntityPlayerMP player, boolean notify)
 	{
 		long added = value + player.world.rand.nextInt(randomBonus + 1);
 		FTBMoney.setMoney(player, FTBMoney.getMoney(player) + added);
 
-		if (MessageDisplayRewardToast.ENABLED)
+		if (notify)
 		{
 			new MessageDisplayRewardToast(FTBMoney.moneyComponent(added), Icon.getIcon("ftbmoney:textures/beastcoinmini.png")).sendTo(player);
 		}
