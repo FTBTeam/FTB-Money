@@ -88,7 +88,7 @@ public class MoneyReward extends Reward
 
 		if (notify)
 		{
-			new MessageDisplayRewardToast(FTBMoney.moneyComponent(added), Icon.getIcon("ftbmoney:textures/beastcoinmini.png")).sendTo(player);
+			new MessageDisplayRewardToast(id, FTBMoney.moneyComponent(added), Icon.getIcon("ftbmoney:textures/beastcoinmini.png")).sendTo(player);
 		}
 	}
 
