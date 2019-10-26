@@ -22,7 +22,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -144,23 +143,16 @@ public class MoneyTask extends Task implements ISingleLongValueTask
 		}
 
 		@Override
-		public boolean submitTask(EntityPlayerMP player, Collection<ItemStack> itemsToCheck, boolean simulate)
+		public void submitTask(EntityPlayerMP player, ItemStack item)
 		{
 			long money = FTBMoney.getMoney(player);
 			long add = Math.min(money, task.value - progress);
 
 			if (add > 0)
 			{
-				if (!simulate)
-				{
-					FTBMoney.setMoney(player, money - add);
-					addProgress(add);
-				}
-
-				return true;
+				FTBMoney.setMoney(player, money - add);
+				addProgress(add);
 			}
-
-			return false;
 		}
 	}
 }
