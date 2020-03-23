@@ -59,7 +59,7 @@ public class ButtonShopEntry extends Button
 
 		if (button.isLeft())
 		{
-			if (locked == 0 || entry.tab.shop.file.canEdit())
+			if (locked == 0 || entry.tab.shop.file.get().canEdit())
 			{
 				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
 					gui.openGui();
@@ -71,7 +71,7 @@ public class ButtonShopEntry extends Button
 				}).openGui();
 			}
 		}
-		else if (button.isRight() && entry.tab.shop.file.canEdit())
+		else if (button.isRight() && entry.tab.shop.file.get().canEdit())
 		{
 			List<ContextMenuItem> contextMenu = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class ButtonShopEntry extends Button
 	@Override
 	public WidgetType getWidgetType()
 	{
-		if (locked > 0 && !entry.tab.shop.file.canEdit())
+		if (locked > 0 && !entry.tab.shop.file.get().canEdit())
 		{
 			return WidgetType.DISABLED;
 		}
@@ -118,7 +118,7 @@ public class ButtonShopEntry extends Button
 			}
 		}
 
-		if (locked < 2 || entry.tab.shop.file.canEdit())
+		if (locked < 2 || entry.tab.shop.file.get().canEdit())
 		{
 			if (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer())
 			{
@@ -134,7 +134,7 @@ public class ButtonShopEntry extends Button
 	{
 		drawBackground(theme, x, y, w, h);
 
-		if (locked == 2 && !entry.tab.shop.file.canEdit())
+		if (locked == 2 && !entry.tab.shop.file.get().canEdit())
 		{
 			GuiIcons.LOCK.draw(x + 4, y + 4, 16, 16);
 			theme.drawString("???", x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);

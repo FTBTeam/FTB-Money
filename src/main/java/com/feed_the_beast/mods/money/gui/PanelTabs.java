@@ -23,7 +23,7 @@ public class PanelTabs extends Panel
 			add(new ButtonTab(this, tab));
 		}
 
-		if (Shop.CLIENT.file.canEdit())
+		if (Shop.CLIENT.file.get().canEdit())
 		{
 			add(new ButtonAddTab(this));
 		}

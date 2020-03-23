@@ -63,7 +63,7 @@ public class PanelShopEntryButtons extends Panel
 		addAll(buttons);
 		addAll(locked);
 
-		if (guiShop.selectedTab != null && Shop.CLIENT.file.canEdit())
+		if (guiShop.selectedTab != null && Shop.CLIENT.file.get().canEdit())
 		{
 			add(new ButtonAddEntry(this));
 		}
