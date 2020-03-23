@@ -10,6 +10,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -22,11 +23,11 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 	public static Shop SERVER;
 	public static Shop CLIENT;
 
-	public final QuestFile file;
+	public final Supplier<QuestFile> file;
 	public final List<ShopTab> tabs = new ArrayList<>();
 	public boolean shouldSave = false;
 
-	public Shop(QuestFile f)
+	public Shop(Supplier<QuestFile> f)
 	{
 		file = f;
 	}
@@ -65,7 +66,7 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 	{
 		shouldSave = true;
 
-		if (!file.isClient())
+		if (!file.get().isClient())
 		{
 			new MessageSyncShop(this).sendToAll();
 		}

@@ -19,7 +19,7 @@ public class FTBMoneyConfig
 	{
 		@Config.RequiresMcRestart
 		@Config.Comment({"true - use config/ftbmoneyshop.nbt file;", "false - use world/data/ftbmoneyshop.nbt file."})
-		public boolean use_config_store = false;
+		public boolean use_config_store = true;
 	}
 
 	@SubscribeEvent

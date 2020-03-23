@@ -52,7 +52,7 @@ public class FTBMoneyEventHandler
 	{
 		if (!event.getWorld().isRemote && event.getWorld().provider.getDimension() == 0)
 		{
-			Shop.SERVER = new Shop(ServerQuestFile.INSTANCE);
+			Shop.SERVER = new Shop(() -> ServerQuestFile.INSTANCE);
 			NBTTagCompound nbt = NBTUtils.readNBT(getFile(event.getWorld()));
 
 			if (nbt != null)

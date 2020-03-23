@@ -49,7 +49,7 @@ public class MessageSyncShop extends MessageToClient
 	@SideOnly(Side.CLIENT)
 	public void onMessage()
 	{
-		Shop.CLIENT = new Shop(ClientQuestFile.INSTANCE);
+		Shop.CLIENT = new Shop(() -> ClientQuestFile.INSTANCE);
 		Shop.CLIENT.deserializeNBT(nbt);
 		FTBMoneyJEIHelper.refresh();
 	}
