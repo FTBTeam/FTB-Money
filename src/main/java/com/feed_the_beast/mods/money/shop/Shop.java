@@ -66,7 +66,7 @@ public class Shop implements INBTSerializable<NBTTagCompound>
 	{
 		shouldSave = true;
 
-		if (!file.get().isClient())
+		if (file.get() != null && !file.get().isClient())
 		{
 			new MessageSyncShop(this).sendToAll();
 		}
