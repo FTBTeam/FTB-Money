@@ -1,80 +1,147 @@
-buildscript {
-	repositories {
-		jcenter()
-		maven { url = "http://files.minecraftforge.net/maven" }
-		maven { url "https://plugins.gradle.org/m2/" }
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.1.0'
-	}
+plugins {
+	id "dev.architectury.loom" version "0.7.2-SNAPSHOT"
+	id 'maven-publish'
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'maven'
+apply from: 'https://files.latmod.com/public/markdown-git-changelog.gradle'
 
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 def ENV = System.getenv()
-version = ENV.BUILD_NUMBER ? "${mod_version}.${ENV.BUILD_NUMBER}" : "${mod_version}.custom"
-group = package_group
-archivesBaseName = mod_name
+version = "${mod_version}-build.${ENV.GITHUB_RUN_NUMBER ?: 9999}"
+archivesBaseName = project.archives_base_name
+group = project.maven_group
 
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-	sourceCompatibility = targetCompatibility = "1.8"
-}
+loom {
+	silentMojangMappingsLicense()
 
-minecraft {
-	version = "${mc_version}-${forge_version}"
-	runDir = "run"
-	mappings = "${mappings_version}"
+	mixinConfigs = [
+	]
 
-	replace "0.0.0.ftbmoney", project.version
-	replaceIn "${mod_reference}"
-}
+	useFabricMixin = true
 
-configurations.all {
-	transitive = false
+	dataGen {
+		mod project.mod_id
+	}
+
+	launches {
+		data {
+			arg "--existing", file("src/main/resources").absolutePath
+			arg "--assetIndex", "1.16"
+			arg "--assetsDir", (ENV.GRADLE_USER_HOME ?: "${System.getProperty("user.home")}/.gradle") + "/caches/fabric-loom/assets"
+		}
+	}
 }
 
 repositories {
-	mavenLocal()
-	maven { url "https://maven.latmod.com/" } //FTBLib, FTB Quests, Item Filters
-	maven { url "http://dvs1.progwml6.com/files/maven" } //JEI
+	maven {
+		url "https://maven.shedaniel.me/"
+		content {
+			includeGroup "me.shedaniel"
+		}
+	}
+
+	maven {
+		url "https://www.cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
+
+	maven {
+		url "https://maven.saps.dev/minecraft"
+		content {
+			includeGroup "dev.latvian.mods"
+			includeGroup "dev.ftb.mods"
+		}
+	}
 }
 
 dependencies {
-	deobfCompile "com.feed_the_beast.mods:FTBLib:${ftblib_version}"
-	deobfCompile "com.feed_the_beast.mods:FTBQuests:${ftbquests_version}"
-	deobfCompile "com.latmod.mods:ItemFilters:${itemfilters_version}"
-	compile "mezz.jei:jei_${mc_version}:${jei_version}:api"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings minecraft.officialMojangMappings()
+	forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+	modImplementation "curse.maven:jei-238222:${jei_file}"
+	modImplementation "me.shedaniel:architectury-forge:${project.architectury_version}"
+	modImplementation "dev.latvian.mods:kubejs-forge:${rootProject.kubejs_version}"
+	modImplementation "dev.latvian.mods:rhino-forge:${rootProject.rhino_version}"
+	modImplementation "dev.ftb.mods:ftb-library-forge:${rootProject.ftb_library_version}"
+	modImplementation "dev.ftb.mods:ftb-teams-forge:${rootProject.ftb_teams_version}"
+	modImplementation "dev.ftb.mods:ftb-quests-forge:${rootProject.ftb_quests_version}"
+	modImplementation "dev.latvian.mods:item-filters-forge:${rootProject.item_filters_version}"
 }
 
 processResources {
 	inputs.property "version", project.version
-	inputs.property "mcversion", project.minecraft.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		expand 'version': project.version, 'mcversion': project.minecraft.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
+	filesMatching("META-INF/mods.toml") {
+		expand "version": project.version
 	}
 }
 
-artifacts {
-	archives sourceJar
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	def targetVersion = 8
+	if (JavaVersion.current().isJava9Compatible()) {
+		it.options.release = targetVersion
+	}
 }
 
-if (ENV.LOCAL_MAVEN) {
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				repository(url: "file://${ENV.LOCAL_MAVEN}")
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
+
+	manifest {
+		attributes([
+				"Specification-Title"     : project.mod_id,
+				"Specification-Vendor"    : project.mod_author,
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : version,
+				"Implementation-Vendor"   : project.mod_author,
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
+publishing {
+	publications {
+		mavenForge(MavenPublication) {
+			artifactId = rootProject.archivesBaseName
+			artifact(remapJar) {
+				classifier null
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	repositories {
+		if (ENV.FTB_MAVEN_TOKEN) {
+			maven {
+				url "https://maven.ftb.dev/release"
+				credentials {
+					username = "ftb"
+					password = "${ENV.FTB_MAVEN_TOKEN}"
+				}
+			}
+		}
+
+		if (ENV.SAPS_TOKEN) {
+			maven {
+				url "https://maven.saps.dev/minecraft"
+				credentials {
+					username = "ftb"
+					password = "${ENV.SAPS_TOKEN}"
+				}
 			}
 		}
 	}
@@ -84,16 +151,16 @@ if (ENV.CURSEFORGE_KEY) {
 	curseforge {
 		apiKey = ENV.CURSEFORGE_KEY
 		project {
-			id = "${curseforge_id}"
-			releaseType = "release"
-			addGameVersion "${mc_version}"
+			id = project.curseforge_id
+			releaseType = project.curseforge_type
+			addGameVersion "1.16.5"
+			mainArtifact(remapJar.archivePath)
 			relations {
-				requiredDependency 'ftb-library'
-				requiredDependency 'ftb-quests'
+				requiredDependency 'ftb-library-forge'
+				requiredDependency 'ftb-quests-forge'
 			}
 			changelog = getGitChangelog
 			changelogType = 'markdown'
-			addArtifact(sourceJar)
 		}
 	}
 }

@@ -12,12 +12,14 @@ out
 *.iws
 *.iml
 .idea
-classes
 
 # gradle
 build
 .gradle
+logs
 
 # other
 eclipse
 run
+run2
+.vscode/

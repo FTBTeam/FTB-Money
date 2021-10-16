@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+issueTrackerURL = "https://github.com/FTBTeam/FTB-Money/issues"
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "ftbmoney"
+version = "${version}"
+displayName = "FTB Money"
+authors = "LatvianModder"
+description = '''
+FTB Money
+'''
+
+[[dependencies.ftbmoney]]
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ftbmoney]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ftbmoney]]
+modId = "ftblibrary"
+mandatory = true
+versionRange = "[1605,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.ftbmoney]]
+modId = "ftbquests"
+mandatory = true
+versionRange = "[1605,)"
+ordering = "AFTER"
+side = "BOTH"

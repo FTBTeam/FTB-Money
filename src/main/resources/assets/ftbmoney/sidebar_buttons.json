@@ -4,7 +4,9 @@
 		"icon": "ftblib:icons/money_bag",
 		"x": 100,
 		"click": "ftbmoney:open_gui",
-		"required_server_mods": ["ftbmoney"],
+		"required_server_mods": [
+			"ftbmoney"
+		],
 		"loading_screen": true
 	}
 }
