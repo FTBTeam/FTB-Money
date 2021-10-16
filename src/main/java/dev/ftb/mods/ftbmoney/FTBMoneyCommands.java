@@ -60,18 +60,30 @@ public class FTBMoneyCommands {
 		return profiles.size();
 	}
 
-	private static int pay(CommandSourceStack source, ServerPlayer from, ServerPlayer to, long value) {
+	private static int pay(CommandSourceStack source, ServerPlayer from, ServerPlayer to, long money) {
 		source.sendFailure(new TextComponent("WIP!"));
 		return 1;
 	}
 
-	private static int set(CommandSourceStack source, Collection<ServerPlayer> players, long value) {
-		source.sendFailure(new TextComponent("WIP!"));
-		return 1;
+	private static int set(CommandSourceStack source, Collection<ServerPlayer> players, long money) {
+		for (ServerPlayer player : players) {
+			source.sendSuccess(new TextComponent(player.getScoreboardName() + ": ").append(FTBMoney.moneyComponent(money)), false);
+			FTBMoney.setMoney(player, money);
+		}
+
+		return players.size();
 	}
 
-	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, long value) {
-		source.sendFailure(new TextComponent("WIP!"));
-		return 1;
+	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, long money) {
+		if (money == 0L) {
+			return 0;
+		}
+
+		for (ServerPlayer player : players) {
+			source.sendSuccess(new TextComponent(player.getScoreboardName() + (money > 0L ? ": +" : ": -")).append(FTBMoney.moneyComponent(Math.abs(money))), false);
+			FTBMoney.setMoney(player, money);
+		}
+
+		return players.size();
 	}
 }
