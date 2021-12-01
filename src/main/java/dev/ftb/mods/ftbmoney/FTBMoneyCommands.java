@@ -81,7 +81,7 @@ public class FTBMoneyCommands {
 
 		for (ServerPlayer player : players) {
 			source.sendSuccess(new TextComponent(player.getScoreboardName() + (money > 0L ? ": +" : ": -")).append(FTBMoney.moneyComponent(Math.abs(money))), false);
-			FTBMoney.setMoney(player, money);
+			FTBMoney.addMoney(player, money);
 		}
 
 		return players.size();
