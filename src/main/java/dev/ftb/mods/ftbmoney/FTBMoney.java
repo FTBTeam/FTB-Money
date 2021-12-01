@@ -143,12 +143,25 @@ public class FTBMoney {
 		}
 	}
 
+	public static void addMoney(ServerPlayer player, long money) {
+		PlayerTeam team = FTBTeamsAPI.getManager().getInternalPlayerTeam(player.getUUID());
+		long balance = team.getExtraData().getLong("Money");
+		long current = balance + money;
+		team.getExtraData().putLong("Money", current);
+		team.save();
+		new UpdateMoneyMessage(player.getUUID(), current).sendToAll(player.server);
+	}
+
 	public static long getMoney(KnownClientPlayer player) {
 		return player.getExtraData().getLong("Money");
 	}
 
 	public static void setMoney(KnownClientPlayer player, long money) {
 		player.getExtraData().putLong("Money", money);
+	}
+
+	public static void addMoney(KnownClientPlayer player, long money) {
+		player.getExtraData().putLong("Money", player.getExtraData().getLong("Money") + money);
 	}
 
 	public static long getClientMoney() {
