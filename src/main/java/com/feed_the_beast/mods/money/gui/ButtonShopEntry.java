@@ -23,13 +23,12 @@ import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author LatvianModder
@@ -61,7 +60,27 @@ public class ButtonShopEntry extends Button
 		{
 			if (locked == 0 || entry.tab.shop.file.get().canEdit())
 			{
-				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
+				int maximum = 0;
+				if (entry.buy > 0) {
+					maximum = (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy);
+				}
+				else if (entry.sell > 0) {
+					Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+					int slot = 0;
+					int current_items = 0;
+					for (ItemStack next : Minecraft.getMinecraft().player.inventory.mainInventory) {
+						if (next != null) {
+							if (next.isItemEqual(entry.stack)) {
+								current_items += next.getCount();
+								items.put(slot, next);
+							}
+						}
+						slot++;
+					}
+
+					maximum = (int) Math.min(1024L, entry.sell <= 0L ? 1024L : current_items / entry.stack.getCount());
+				}
+				new GuiEditConfigValue("count", new ConfigInt(1, 1, maximum), (value, set) -> {
 					gui.openGui();
 
 					if (set)

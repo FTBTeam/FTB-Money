@@ -103,13 +103,13 @@ public class GuiShop extends GuiBase
 	public void drawBackground(Theme theme, int x, int y, int w, int h)
 	{
 		super.drawBackground(theme, x, y, w, h);
-		theme.drawString(title, x + (width - theme.getStringWidth(title)) / 2, y - 23, Theme.SHADOW);
+		theme.drawString(title, x + (width - theme.getStringWidth(title)) / 2, y - 33, Theme.SHADOW);
 		String balance = TextFormatting.GOLD + FTBMoney.moneyString(FTBMoney.getMoney(Minecraft.getMinecraft().player));
-		theme.drawString(balance, x + (width - theme.getStringWidth(balance)) - 2, y - 10, Theme.SHADOW);
+		theme.drawString(balance, x + (width - theme.getStringWidth(balance)) / 2 - 2, y - 10, Theme.SHADOW);
 
 		if (selectedTab != null)
 		{
-			theme.drawString(selectedTab.title, x + 2, y - 10, Theme.SHADOW);
+			theme.drawString(selectedTab.title, x + (width - theme.getStringWidth(selectedTab.title)) / 2, y - 20, Theme.SHADOW);
 		}
 	}
 }

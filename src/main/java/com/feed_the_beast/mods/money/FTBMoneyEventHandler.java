@@ -15,10 +15,12 @@ import com.feed_the_beast.mods.money.integration.MoneyTask;
 import com.feed_the_beast.mods.money.net.MessageSyncShop;
 import com.feed_the_beast.mods.money.net.MessageUpdateMoney;
 import com.feed_the_beast.mods.money.shop.Shop;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -79,6 +81,20 @@ public class FTBMoneyEventHandler
 		{
 			new MessageSyncShop(Shop.SERVER).sendTo((EntityPlayerMP) event.player);
 			new MessageUpdateMoney(FTBMoney.getMoney(event.player)).sendTo((EntityPlayerMP) event.player);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerJoinWorld(EntityJoinWorldEvent event) {
+		if (event.getEntity() instanceof EntityPlayerSP) {
+			EntityPlayerSP player = (EntityPlayerSP) event.getEntity();
+			long money = FTBMoney.getMoney(player);
+            FTBMoney.setMoney(player, money);
+		}
+		if (event.getEntity() instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+			long money = FTBMoney.getMoney(player);
+			new MessageUpdateMoney(money).sendTo((EntityPlayerMP) player);
 		}
 	}
 
