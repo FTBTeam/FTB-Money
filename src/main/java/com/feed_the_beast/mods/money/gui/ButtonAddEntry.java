@@ -33,7 +33,7 @@ public class ButtonAddEntry extends SimpleTextButton
 
 				if (set)
 				{
-					new GuiEditConfigValue("buy_price", new ConfigLong(1L, 0L, Long.MAX_VALUE), (value_sell, set_sell) -> {
+					new GuiEditConfigValue("sell_price", new ConfigLong(1L, 0L, Long.MAX_VALUE), (value_sell, set_sell) -> {
 						gui.openGui();
 
 						if (set_sell)
