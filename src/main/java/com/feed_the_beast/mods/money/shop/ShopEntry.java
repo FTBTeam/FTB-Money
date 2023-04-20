@@ -106,7 +106,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		disabledServer = nbt.getBoolean("disabled_server");
 	}
 
-	public boolean isUnlocked(@Nullable QuestData data)
+	public boolean isUnlocked(@Nullable QuestObject data)
 	{
 		if (lock == 0)
 		{
@@ -118,7 +118,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		}
 
 		QuestObject object = tab.shop.file.get().get(lock);
-		return object != null && object.isComplete(data);
+		return object != null && object.cacheProgress();
 	}
 
 	public void getConfig(ConfigGroup group)
