@@ -42,11 +42,19 @@ public class ButtonShopEntry extends Button
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
-		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
+		super(panel, e.stack.getRarity().getColor() + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
 		QuestObject lock = ClientQuestFile.INSTANCE.get(entry.lock);
 		locked = (entry.lock == 0 || lock != null && lock.isComplete(ClientQuestFile.INSTANCE.self)) ? (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer()) ? 1 : 0 : 2;
-		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
+		if (entry.buy >= 1) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
+		}
+		else if (entry.sell >= 1) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.sell))) + 32);
+		}
+		else if (entry.sell == 0 && entry.buy == 0) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(I18n.format("shop.shop.entry.item.free"))) + 32);
+		}
 		setHeight(24);
 	}
 
@@ -172,7 +180,15 @@ public class ButtonShopEntry extends Button
 
 		drawIcon(theme, x + 4, y + 4, 16, 16);
 		theme.drawString(t, x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
-		theme.drawString(TextFormatting.GOLD + FTBMoney.moneyString(entry.buy), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		if (entry.buy >= 1) {
+			theme.drawString(TextFormatting.RED + FTBMoney.moneyString(entry.buy), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
+		else if (entry.sell >= 1) {
+			theme.drawString(TextFormatting.BLUE + FTBMoney.moneyStringAdd(entry.sell), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
+		else if (entry.sell == 0 && entry.buy == 0) {
+			theme.drawString(TextFormatting.GREEN + I18n.format("shop.shop.entry.item.free"), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
 	}
 
 	@Override

@@ -88,6 +88,10 @@ public class FTBMoney
 		}
 	}
 
+	public static String moneyStringAdd(long money)
+	{
+		return String.format("\u0398 +%,d", money);
+	}
 	public static String moneyString(long money)
 	{
 		return String.format("\u0398 %,d", money);
