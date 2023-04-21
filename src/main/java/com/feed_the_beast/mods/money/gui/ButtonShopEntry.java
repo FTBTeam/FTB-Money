@@ -68,7 +68,7 @@ public class ButtonShopEntry extends Button
 		{
 			if (locked == 0 || entry.tab.shop.file.get().canEdit())
 			{
-				int maximum = 0;
+				int maximum = 64;
 				if (entry.buy > 0) {
 					maximum = (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy);
 				}
