@@ -73,17 +73,13 @@ public class ButtonShopEntry extends Button
 					maximum = (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy);
 				}
 				else if (entry.sell > 0) {
-					Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
-					int slot = 0;
 					int current_items = 0;
 					for (ItemStack next : Minecraft.getMinecraft().player.inventory.mainInventory) {
 						if (next != null) {
 							if (next.isItemEqual(entry.stack)) {
 								current_items += next.getCount();
-								items.put(slot, next);
 							}
 						}
-						slot++;
 					}
 
 					maximum = (int) Math.min(1024L, entry.sell <= 0L ? 1024L : current_items / entry.stack.getCount());
