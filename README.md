@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="src/main/resources/assets/plus/logo.png" alt="ftb-money-logo" width="160"/>
+	<img src="src/main/resources/assets/ftbmoney/logo.png" alt="ftb-money-logo" width="160"/>
 	<h1>FTB Money</h1>
 	<br>An mod <a href="https://www.curseforge.com/minecraft/mc-mods/ftb-money-forge">FTB Money</a> adds money, shops and trading.
 	<br/><br/>
