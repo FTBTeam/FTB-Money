@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="https://media.forgecdn.net/avatars/275/358/637261947733711398.png" alt="meteor-plus" width="160"/>
+	<img src="https://media.forgecdn.net/avatars/275/358/637261947733711398.png" alt="ftb-money-logo" width="160"/>
 	<h1>FTB Money</h1>
 	<br>An mod <a href="https://www.curseforge.com/minecraft/mc-mods/ftb-money-forge">FTB Money</a> adds money, shops and trading.
 	<br/><br/>
