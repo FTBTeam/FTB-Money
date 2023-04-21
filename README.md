@@ -3,7 +3,7 @@
 	<b><h1>FTB Money</h1><b>
 	<b>An mod <a href="https://www.curseforge.com/minecraft/mc-mods/ftb-money-forge">FTB Money </a> adds money, shop.
 	<br>
-	<b>Use <a href="https://www.curseforge.com/minecraft/mc-mods/ftb-money-forge">FTB Mods Issues </a> for any mod issues.
+	<b>Use <a href="https://github.com/FTBTeam/FTB-Mods-Issues">FTB Mods Issues </a> for any mod issues.
 <br><br/>
 <table align="center">
     <thead>
