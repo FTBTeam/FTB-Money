@@ -106,7 +106,7 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		disabledServer = nbt.getBoolean("disabled_server");
 	}
 
-	public boolean isUnlocked(@Nullable QuestData data)
+	public boolean isUnlocked(@Nullable QuestObject data)
 	{
 		if (lock == 0)
 		{
@@ -118,13 +118,14 @@ public class ShopEntry implements INBTSerializable<NBTTagCompound>
 		}
 
 		QuestObject object = tab.shop.file.get().get(lock);
-		return object != null && object.isComplete(data);
+		return object != null && object.cacheProgress();
 	}
 
 	public void getConfig(ConfigGroup group)
 	{
 		group.add("item", new ConfigItemStack.SimpleStack(() -> stack, v -> stack = v), new ConfigItemStack(ItemStack.EMPTY));
 		group.addLong("buy", () -> buy, v -> buy = v, 1L, 0L, Long.MAX_VALUE);
+		group.addLong("sell", () -> sell, v -> sell = v, 1L, 0L, Long.MAX_VALUE);
 		//group.addLong("sell", () -> sell, v -> sell = v, 0L, 0L, Long.MAX_VALUE);
 		group.add("lock", new ConfigQuestObject(tab.shop.file.get(), lock, QuestObjectType.ALL_PROGRESSING_OR_NULL)
 		{

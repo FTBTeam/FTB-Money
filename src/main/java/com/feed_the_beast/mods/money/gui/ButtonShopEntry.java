@@ -23,13 +23,12 @@ import com.feed_the_beast.mods.money.net.MessageEditShopEntry;
 import com.feed_the_beast.mods.money.shop.ShopEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author LatvianModder
@@ -43,11 +42,19 @@ public class ButtonShopEntry extends Button
 
 	public ButtonShopEntry(Panel panel, ShopEntry e)
 	{
-		super(panel, e.stack.getRarity().color + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
+		super(panel, e.stack.getRarity().getColor() + e.stack.getDisplayName(), ItemIcon.getItemIcon(e.stack));
 		entry = e;
 		QuestObject lock = ClientQuestFile.INSTANCE.get(entry.lock);
 		locked = (entry.lock == 0 || lock != null && lock.isComplete(ClientQuestFile.INSTANCE.self)) ? (entry.disabledServer && !Minecraft.getMinecraft().isSingleplayer()) ? 1 : 0 : 2;
-		setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
+		if (entry.buy >= 1) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.buy))) + 32);
+		}
+		else if (entry.sell >= 1) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(FTBMoney.moneyString(entry.sell))) + 32);
+		}
+		else if (entry.sell == 0 && entry.buy == 0) {
+			setWidth(Math.max(panel.getGui().getTheme().getStringWidth(title), panel.getGui().getTheme().getStringWidth(I18n.format("shop.shop.entry.item.free"))) + 32);
+		}
 		setHeight(24);
 	}
 
@@ -61,7 +68,23 @@ public class ButtonShopEntry extends Button
 		{
 			if (locked == 0 || entry.tab.shop.file.get().canEdit())
 			{
-				new GuiEditConfigValue("count", new ConfigInt(1, 1, (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy)), (value, set) -> {
+				int maximum = 64;
+				if (entry.buy > 0) {
+					maximum = (int) Math.min(1024L, entry.buy <= 0L ? 1024L : FTBMoney.getMoney(Minecraft.getMinecraft().player) / entry.buy);
+				}
+				else if (entry.sell > 0) {
+					int current_items = 0;
+					for (ItemStack next : Minecraft.getMinecraft().player.inventory.mainInventory) {
+						if (next != null) {
+							if (next.isItemEqual(entry.stack)) {
+								current_items += next.getCount();
+							}
+						}
+					}
+
+					maximum = (int) Math.min(1024L, entry.sell <= 0L ? 1024L : current_items / entry.stack.getCount());
+				}
+				new GuiEditConfigValue("count", new ConfigInt(1, 1, maximum), (value, set) -> {
 					gui.openGui();
 
 					if (set)
@@ -153,7 +176,15 @@ public class ButtonShopEntry extends Button
 
 		drawIcon(theme, x + 4, y + 4, 16, 16);
 		theme.drawString(t, x + 24, y + 3, theme.getContentColor(getWidgetType()), Theme.SHADOW);
-		theme.drawString(TextFormatting.GOLD + FTBMoney.moneyString(entry.buy), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		if (entry.buy >= 1) {
+			theme.drawString(TextFormatting.RED + FTBMoney.moneyString(entry.buy), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
+		else if (entry.sell >= 1) {
+			theme.drawString(TextFormatting.BLUE + FTBMoney.moneyStringAdd(entry.sell), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
+		else if (entry.sell == 0 && entry.buy == 0) {
+			theme.drawString(TextFormatting.GREEN + I18n.format("shop.shop.entry.item.free"), x + 24, y + 13, Color4I.WHITE, Theme.SHADOW);
+		}
 	}
 
 	@Override

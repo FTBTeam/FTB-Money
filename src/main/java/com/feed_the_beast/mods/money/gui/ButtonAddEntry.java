@@ -28,18 +28,26 @@ public class ButtonAddEntry extends SimpleTextButton
 		GuiHelper.playClickSound();
 		GuiShop gui = (GuiShop) getGui();
 		new GuiSelectItemStack(gui, stack -> {
-			new GuiEditConfigValue("price", new ConfigLong(1L, 1L, Long.MAX_VALUE), (value, set) -> {
+			new GuiEditConfigValue("buy_price", new ConfigLong(1L, 0L, Long.MAX_VALUE), (value, set) -> {
 				gui.openGui();
 
 				if (set)
 				{
-					ShopEntry entry = new ShopEntry(gui.selectedTab);
-					entry.stack = stack.copy();
-					entry.buy = value.getLong();
-					entry.tab.entries.add(entry);
-					gui.refreshWidgets();
-					gui.openGui();
-					new MessageAddShopEntry(entry).sendToServer();
+					new GuiEditConfigValue("sell_price", new ConfigLong(1L, 0L, Long.MAX_VALUE), (value_sell, set_sell) -> {
+						gui.openGui();
+
+						if (set_sell)
+						{
+							ShopEntry entry = new ShopEntry(gui.selectedTab);
+							entry.stack = stack.copy();
+							entry.buy = value.getLong();
+							entry.sell = value_sell.getLong();
+							entry.tab.entries.add(entry);
+							gui.refreshWidgets();
+							gui.openGui();
+							new MessageAddShopEntry(entry).sendToServer();
+						}
+					}).openGui();
 				}
 			}).openGui();
 		}).openGui();
